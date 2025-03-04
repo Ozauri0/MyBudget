@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Análisis de Gastos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="chart-container">
+    <ion-card class="chart-card">
+      <ion-card-header>
+        <ion-card-title>Distribución de Gastos</ion-card-title>
+        <ion-card-subtitle>Gastos por categoría</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div echarts [options]="pieChartOption" class="chart pie-chart"></div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="chart-card">
+      <ion-card-header>
+        <ion-card-title>Evolución Mensual</ion-card-title>
+        <ion-card-subtitle>Ingresos vs Gastos</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div echarts [options]="lineChartOption" class="chart line-chart"></div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="chart-card">
+      <ion-card-header>
+        <ion-card-title>Balance Últimos 6 Meses</ion-card-title>
+        <ion-card-subtitle>Resumen de balance mensual</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div echarts [options]="barChartOption" class="chart bar-chart"></div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

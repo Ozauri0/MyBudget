@@ -1,0 +1,41 @@
+<ion-content class="ion-padding setup-content">
+  <div class="form-container">
+    <h1>Configuración Inicial</h1>
+    <form (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label position="floating">¿Cuál es tu nombre?</ion-label>
+        <ion-input 
+          type="text"
+          [(ngModel)]="userName" 
+          name="userName" 
+          required
+          label="Nombre"
+          labelPlacement="floating"
+          fill="solid"
+          placeholder="Escribe tu nombre">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">¿Cuál es tu apellido?</ion-label>
+        <ion-input 
+          type="text"
+          [(ngModel)]="userLastName" 
+          name="userLastName" 
+          required
+          label="Apellido"
+          labelPlacement="floating"
+          fill="solid"
+          placeholder="Escribe tu apellido">
+        </ion-input>
+      </ion-item>
+
+
+
+      <ion-button expand="block" type="submit" class="ion-margin-top">
+        Comenzar
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+

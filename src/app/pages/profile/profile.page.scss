@@ -1,0 +1,306 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background: var(--ion-color-light);
+  min-height: 100%;
+}
+
+.profile-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  .initials {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .change-gradient-button {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    margin: 0;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --border-radius: 50%;
+    height: 36px;
+    width: 36px;
+    --background: var(--ion-color-light);
+    --color: var(--ion-color-primary);
+    
+
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.profile-form {
+  width: 100%;
+  max-width: 400px;
+  background: transparent;
+  margin-bottom: 24px;
+
+  ion-item {
+    --background: white;
+    --border-radius: 12px;
+    margin-bottom: 16px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --inner-padding-end: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    ion-input, ion-select {
+      --padding-start: 0;
+      --padding-end: 0;
+      --padding-top: 8px;
+      --padding-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    ion-label {
+      color: var(--ion-color-medium);
+    }
+  }
+
+  .name-input, .currency-input {
+    &.readonly {
+      opacity: 0.7;
+    }
+  }
+}
+
+.action-buttons {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  ion-button {
+    margin: 0;
+    height: 48px;
+    --border-radius: 12px;
+    font-weight: 500;
+    font-size: 1rem;
+
+    &.edit-button {
+      --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.2);
+    }
+
+    &.save-button {
+      --background: var(--ion-color-primary);
+      --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.2);
+    }
+
+    &.cancel-button {
+      --border-width: 2px;
+    }
+
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.export-button {
+  margin-top: 16px;
+  --background: var(--ion-color-tertiary);
+  --box-shadow: 0 4px 12px rgba(var(--ion-color-tertiary-rgb), 0.2);
+}
+
+.import-button {
+  margin-top: 16px;
+  --background: var(--ion-color-secondary);
+  --box-shadow: 0 4px 12px rgba(var(--ion-color-secondary-rgb), 0.2);
+}
+
+// Estilos para el selector de gradientes
+.gradient-select-alert {
+  --max-width: 360px;
+  
+  .alert-wrapper {
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .alert-head {
+    padding: 20px;
+    background: var(--ion-color-light);
+    border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.1);
+
+    .alert-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+
+  .alert-radio-group {
+    padding: 12px;
+    max-height: none;
+    border-radius: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .alert-radio-label {
+    padding: 0;
+    height: 80px;
+    border-radius: 12px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &::after {
+      content: attr(aria-label);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      padding: 4px;
+    }
+  }
+
+  // Estilos para cada gradiente
+  .gradient-1 .alert-radio-label {
+    background: var(--gradient-1);
+  }
+  
+  .gradient-2 .alert-radio-label {
+    background: var(--gradient-2);
+  }
+  
+  .gradient-3 .alert-radio-label {
+    background: var(--gradient-3);
+  }
+  
+  .gradient-4 .alert-radio-label {
+    background: var(--gradient-4);
+  }
+  
+  .gradient-5 .alert-radio-label {
+    background: var(--gradient-5);
+  }
+  
+  .gradient-6 .alert-radio-label {
+    background: var(--gradient-6);
+  }
+
+  .gradient-7 .alert-radio-label {
+    background: var(--gradient-7);
+  }
+
+  .gradient-8 .alert-radio-label {
+    background: var(--gradient-8);
+  }
+
+  .gradient-9 .alert-radio-label {
+    background: var(--gradient-9);
+  }
+
+  .gradient-10 .alert-radio-label {
+    background: var(--gradient-10);
+  }
+
+  .gradient-11 .alert-radio-label {
+    background: var(--gradient-11);
+  }
+
+  .gradient-12 .alert-radio-label {
+    background: var(--gradient-12);
+  }
+
+  .alert-radio-inner {
+    display: none;
+  }
+
+  .alert-radio-icon {
+    display: none;
+  }
+
+  [aria-checked="true"] {
+    .alert-radio-label {
+      box-shadow: 0 0 0 3px var(--ion-color-primary);
+      transform: scale(0.95);
+    }
+  }
+
+  .alert-button-group {
+    padding: 12px;
+    border-top: 1px solid rgba(var(--ion-color-medium-rgb), 0.1);
+    display: flex;
+    gap: 8px;
+
+    .alert-button {
+      margin: 0;
+      flex: 1;
+      font-size: 1rem;
+      font-weight: 500;
+      height: 44px;
+      border-radius: 12px;
+      text-transform: none;
+
+      &.alert-button-cancel {
+        --background: var(--ion-color-light);
+        --color: var(--ion-color-medium);
+      }
+
+      &.alert-button-confirm {
+        --background: var(--ion-color-primary);
+        --color: white;
+      }
+    }
+  }
+}
+
+:root {
+  --gradient-1: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+  --gradient-2: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+  --gradient-3: linear-gradient(135deg, #7028e4 0%, #e5b2ca 100%);
+  --gradient-4: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%);
+  --gradient-5: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+  --gradient-6: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  --gradient-7: linear-gradient(135deg, #FF0080 0%, #FF8C00 100%);
+  --gradient-8: linear-gradient(135deg, #43B692 0%, #16A085 100%);
+  --gradient-9: linear-gradient(135deg, #FF512F 0%, #F09819 100%);
+  --gradient-10: linear-gradient(135deg, #9795f0 0%, #fbc8d4 100%);
+  --gradient-11: linear-gradient(135deg, #2AF598 0%, #009EFD 100%);
+  --gradient-12: linear-gradient(135deg, #FF0844 0%, #FFB199 100%);
+}

@@ -1,0 +1,89 @@
+<app-header [title]="'Mi Perfil'"></app-header>
+
+<ion-content>
+  <div class="profile-container" *ngIf="userData">
+    <!-- Avatar con iniciales -->
+    <div class="profile-avatar" [style.background]="gradients[selectedGradient - 1].gradient">
+      <span class="initials">{{userInitials}}</span>
+      <ion-button fill="clear" 
+                  class="change-gradient-button"
+                  (click)="selectGradient()">
+        <ion-icon name="color-palette-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Formulario de perfil -->
+    <ion-list class="profile-form">
+      <!-- Nombre -->
+      <ion-item>
+        <ion-input
+          label="Nombre"
+          labelPlacement="floating"
+          [(ngModel)]="userData.name"
+          [readonly]="!isEditing">
+        </ion-input>
+      </ion-item>
+
+      <!-- Moneda -->
+      <ion-item>
+        <ion-input
+          label="Moneda"
+          labelPlacement="floating"
+          [readonly]="true"
+          [value]="selectedCurrency.symbol + ' - ' + selectedCurrency.name">
+        </ion-input>
+        <ion-select *ngIf="isEditing"
+          [(ngModel)]="selectedCurrency"
+          (ionChange)="onCurrencyChange($event.detail.value)"
+          interface="action-sheet"
+          [interfaceOptions]="{ header: 'Seleccionar Moneda' }">
+          <ion-select-option *ngFor="let currency of currencies" [value]="currency">
+            {{currency.symbol}} - {{currency.name}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+      <ion-button *ngIf="!isEditing" 
+                  expand="block"
+                  (click)="isEditing = true"
+                  class="edit-button">
+        <ion-icon name="pencil-outline" slot="start"></ion-icon>
+        Editar Perfil
+      </ion-button>
+
+      <ion-button expand="block"
+      color="secondary"
+      (click)="importDatabase()"
+      class="import-button">
+<ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+Importar datos
+</ion-button>
+
+      <ion-button expand="block"
+            color="tertiary"
+            (click)="exportDatabase()"
+            class="export-button">
+  <ion-icon name="download-outline" slot="start"></ion-icon>
+  Exportar datos
+</ion-button>
+
+      <ng-container *ngIf="isEditing">
+        <ion-button expand="block"
+                    (click)="saveChanges()"
+                    class="save-button">
+          Guardar Cambios
+        </ion-button>
+        <ion-button expand="block"
+                    fill="outline"
+                    color="medium"
+                    (click)="cancelEdit()"
+                    class="cancel-button">
+          Cancelar
+        </ion-button>
+      </ng-container>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,125 @@
+<app-header [title]="'Inicio'"></app-header>
+
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    <!-- Balance Card -->
+    <ion-card *ngIf="userData" class="balance-card">
+      <ion-card-content>
+        <h2 class="welcome-title">¡Bienvenido {{ userData.name }}!</h2>
+        <div class="balance-container">
+          <p class="balance-label">Balance disponible</p>
+          <p class="balance-amount">${{ availableBalance | number:'1.0-0' }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Date Selector -->
+    <div class="date-selector">
+      <div class="year-selector">
+        <ion-button 
+          fill="clear" 
+          class="year-button"
+          [class.active]="true">
+          <ion-select
+            [(ngModel)]="selectedYear"
+            (ionChange)="onDateChange()"
+            interface="action-sheet"
+            [interfaceOptions]="{ header: 'Seleccionar Año' }">
+            <ion-select-option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </ion-select-option>
+          </ion-select>
+          {{ selectedYear }}
+        </ion-button>
+      </div>
+
+      <div class="month-scroll" #monthScroll>
+        <div 
+          *ngFor="let month of months; let i = index" 
+          class="date-item"
+          [class.active]="selectedMonth === i"
+          (click)="selectedMonth = i; onDateChange()">
+          {{ month }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Summary -->
+    <div class="monthly-summary">
+      <div class="summary-item income">
+        <ion-icon name="trending-up-outline" color="success"></ion-icon>
+        <div class="summary-content">
+          <span class="label">Ingresos del mes</span>
+          <span class="amount" [class.increasing]="isIncreasing('income')" [class.decreasing]="isDecreasing('income')">
+            ${{ monthlyIncome | number:'1.0-0' }}
+          </span>
+        </div>
+      </div>
+      <div class="summary-item expense">
+        <ion-icon name="trending-down-outline" color="danger"></ion-icon>
+        <div class="summary-content">
+          <span class="label">Gastos del mes</span>
+          <span class="amount" [class.increasing]="isIncreasing('expense')" [class.decreasing]="isDecreasing('expense')">
+            ${{ monthlyExpenses | number:'1.0-0' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions List -->
+    <div class="transactions-container">
+      <ion-list>
+        <ng-container *ngIf="getFilteredTransactions().length > 0; else noTransactions">
+          <ion-item *ngFor="let transaction of getFilteredTransactions()" class="transaction-item"
+  (click)="editTransaction(transaction)"
+  button>
+  <ion-label>
+    <h2>
+      {{ transaction.name }}
+      <ion-icon 
+        *ngIf="transaction.isRecurrent" 
+        name="repeat-outline" 
+        color="medium"
+        size="small">
+      </ion-icon>
+    </h2>
+    <p class="category">{{ transaction.category }}</p>
+    <p class="date-text">
+      {{ transaction.date | date:'dd/MM/yyyy HH:mm' }}
+      <span *ngIf="transaction.isRecurrent" class="recurrent-info">
+        <br>Recurrencia: {{ transaction.recurrenceType === 'monthly' ? 'Mensual' : 'Anual' }}
+        <br>Próximo: {{ transaction.nextDueDate | date:'dd/MM/yyyy' }}
+      </span>
+    </p>
+  </ion-label>
+  <ion-note slot="end" [color]="transaction.amount > 0 ? 'danger' : 'success'" class="amount-text">
+    {{ transaction.amount > 0 ? '-' : '+' }}${{ transaction.amount | abs | number:'1.0-0' }}
+  </ion-note>
+</ion-item>
+        </ng-container>
+        <ng-template #noTransactions>
+          <div class="no-transactions">
+            <p>No hay transacciones para este mes</p>
+          </div>
+        </ng-template>
+      </ion-list>
+    </div>
+  </div>
+
+  <!-- FAB Button -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button class="fab-button-with-text" color="danger" (click)="addTransaction(true)">
+        <ion-icon name="trending-down-outline"></ion-icon>
+        <ion-label>Nuevo Gasto</ion-label>
+      </ion-fab-button>
+      <ion-fab-button class="fab-button-with-text" color="success" (click)="addTransaction(false)">
+        <ion-icon name="trending-up-outline"></ion-icon>
+        <ion-label>Nuevo Ingreso</ion-label>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

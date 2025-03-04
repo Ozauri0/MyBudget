@@ -1,0 +1,59 @@
+<app-header [title]="'Mis metas'"></app-header>
+
+<ion-content [fullscreen]="true">
+  <div class="goals-container">
+    <ion-card *ngFor="let goal of goals" class="goal-card" (click)="navigateToDetails(goal)">
+      <ion-ripple-effect></ion-ripple-effect>
+      
+      <ion-card-header>
+        <div class="header-content">
+          <div class="goal-info">
+            <ion-card-title class="goal-title">{{goal.name}}</ion-card-title>
+            <ion-card-subtitle *ngIf="goal.deadline" class="goal-deadline">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{goal.deadline | date:'dd/MM/yyyy'}}
+            </ion-card-subtitle>
+            <p *ngIf="goal.description" class="goal-description">
+              {{goal.description}}
+            </p>
+          </div>
+          <div class="action-buttons">
+            <ion-button fill="clear" color="danger" (click)="deleteGoal($event, goal)" class="delete-button">
+              <ion-icon name="trash-outline" size="small"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="progress-section">
+          <div class="progress-info">
+            <div class="amount-info">
+              <span class="current-amount">{{goal.currentAmount | currency:'':'symbol':'1.0-0'}}</span>
+              <span class="target-amount">de {{goal.targetAmount | currency:'':'symbol':'1.0-0'}}</span>
+            </div>
+            <span class="percentage" [class.completed]="getProgressPercentage(goal) >= 100">
+              {{getProgressPercentage(goal) | number:'1.0-0'}}%
+            </span>
+          </div>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar">
+              <div class="progress-fill" 
+                   [style.width]="getProgressPercentage(goal) + '%'"
+                   [class.completed]="getProgressPercentage(goal) >= 100">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addGoal()" class="add-goal-button">
+      <ion-icon [icon]="addOutline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
