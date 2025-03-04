@@ -45,8 +45,17 @@
             [(ngModel)]="goal.deadline"
             placeholder="Fecha límite (opcional)">
           </ion-input>
-        </ion-item>
 
+        </ion-item>
+        <ion-button 
+        expand="block" 
+        color="primary" 
+        class="save-fields-button"
+        [disabled]="!hasChanges()"
+        (click)="saveChanges()">
+        Guardar cambios
+      </ion-button>
+      
       </ion-card-header>
 
       <ion-card-content>
