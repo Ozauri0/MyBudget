@@ -39,7 +39,7 @@ import { AbsPipe } from '../../pipes/abs.pipe';
   selector: 'app-add-expense',
   template: `
     <ion-header>
-      <ion-toolbar [color]="isExpense ? 'danger' : 'success'">
+      <ion-toolbar [color]="isExpense ? 'light' : 'light'">
         <ion-title>{{ isEdit ? 'Editar transacción' : (isExpense ? 'Nuevo Gasto' : 'Nuevo Ingreso') }}</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -101,7 +101,7 @@ import { AbsPipe } from '../../pipes/abs.pipe';
         </ion-item>
       </ion-list>
 
-      <ion-button expand="block" [color]="isExpense ? 'danger' : 'success'" (click)="submit()">
+      <ion-button expand="block" [color]="isExpense ? 'primary' : 'primary'" (click)="submit()">
         {{ isEdit ? 'Guardar cambios' : (isExpense ? 'Agregar Gasto' : 'Agregar Ingreso') }}
       </ion-button>
 
