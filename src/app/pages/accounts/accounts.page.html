@@ -12,10 +12,26 @@
     <ion-card class="chart-card">
       <ion-card-header>
         <ion-card-title>Distribución de Gastos</ion-card-title>
-        <ion-card-subtitle>Gastos por categoría</ion-card-subtitle>
+        
+        <ion-item lines="none" class="month-selector">
+          <ion-select
+            label="Mes"
+            labelPlacement="floating"
+            [value]="selectedMonth" 
+            (ionChange)="onMonthChange($event)"
+            interface="popover">
+            <ion-select-option *ngFor="let month of availableMonths" [value]="month">
+              {{ getMonthName(month) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        
       </ion-card-header>
       <ion-card-content>
-        <div echarts [options]="pieChartOption" class="chart pie-chart"></div>
+        <div *ngIf="availableMonths.length > 0" echarts [options]="pieChartOption" class="chart pie-chart"></div>
+        <div *ngIf="availableMonths.length === 0" class="no-data">
+          <p>No hay datos de gastos disponibles</p>
+        </div>
       </ion-card-content>
     </ion-card>
 

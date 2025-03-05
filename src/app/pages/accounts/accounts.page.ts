@@ -12,7 +12,12 @@ import {
   IonCardContent,
   IonCardSubtitle,
   IonButtons,
-  IonBackButton
+  IonBackButton,
+  IonSelect,
+  IonSelectOption,
+  IonItem,
+  IonLabel
+
 } from '@ionic/angular/standalone';
 import { DatabaseService } from '../../services/database.service';
 import { CurrencyService } from '../../services/currency.service';
@@ -41,12 +46,23 @@ import { Subscription, merge } from 'rxjs';
     IonCardSubtitle,
     IonButtons,
     IonBackButton,
-    NgxEchartsModule
+    NgxEchartsModule,
+    IonSelect,
+    IonSelectOption,
+    IonItem,
+    IonLabel,
   ]
 })
 export class AccountsPage implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
   transactions: Transaction[] = [];
   private subscriptions = new Subscription();
+  
+  // Añadir estas propiedades
+  availableMonths: string[] = [];
+  selectedMonth: string = '';
   
   pieChartOption: EChartsOption = {};
   lineChartOption: EChartsOption = {};
@@ -68,29 +84,62 @@ export class AccountsPage implements OnInit, OnDestroy {
     this.loadTransactions();
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+  private initializeSubscriptions() {
+    // Add your subscription initialization logic here
   }
 
-  private initializeSubscriptions() {
-    const updateEvents$ = merge(
-      this.events.transactionAdded$,
-      this.events.transactionUpdated$,
-      this.events.transactionDeleted$,
-      this.events.userCreated$,
-      this.events.userUpdated$
-    );
+  // Nueva función para manejar el cambio de mes
+  onMonthChange(event: any) {
+    this.selectedMonth = event.detail.value;
+    this.preparePieChartData();
+    this.cdr.detectChanges();
+  }
 
-    this.subscriptions.add(
-      updateEvents$.subscribe(() => {
-        this.loadTransactions();
-      })
-    );
+  // Obtener meses disponibles de las transacciones
+  private getAvailableMonths() {
+    const monthsSet = new Set<string>();
+    
+    this.transactions.forEach(t => {
+      if (t.amount > 0) { // Solo para gastos
+        const date = new Date(t.date);
+        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
+        monthsSet.add(monthYear);
+      }
+    });
+    
+    this.availableMonths = Array.from(monthsSet).sort((a, b) => {
+      const [monthA, yearA] = a.split('/').map(Number);
+      const [monthB, yearB] = b.split('/').map(Number);
+      return yearA !== yearB ? yearA - yearB : monthA - monthB;
+    });
+    
+    // Seleccionar el mes actual por defecto
+    if (!this.selectedMonth || !this.availableMonths.includes(this.selectedMonth)) {
+      const now = new Date();
+      const currentMonth = `${now.getMonth() + 1}/${now.getFullYear()}`;
+      
+      if (this.availableMonths.includes(currentMonth)) {
+        this.selectedMonth = currentMonth;
+      } else if (this.availableMonths.length > 0) {
+        // Si no hay datos para el mes actual, seleccionar el último mes disponible
+        this.selectedMonth = this.availableMonths[this.availableMonths.length - 1];
+      }
+    }
+  }
+  
+  // Función para obtener el nombre del mes para mostrar
+  getMonthName(monthString: string): string {
+    const [month, year] = monthString.split('/').map(Number);
+    const date = new Date(year, month - 1, 1);
+    
+    // Formato: "Junio 2023"
+    return date.toLocaleString('es', { month: 'long', year: 'numeric' });
   }
 
   private async loadTransactions() {
     try {
       this.transactions = await this.database.getTransactions();
+      this.getAvailableMonths(); // Obtener meses disponibles
       this.updateAllCharts();
       this.cdr.detectChanges();
     } catch (error) {
@@ -98,22 +147,28 @@ export class AccountsPage implements OnInit, OnDestroy {
     }
   }
 
+  // Modificar preparePieChartData para filtrar por mes seleccionado
   private updateAllCharts() {
-    setTimeout(() => {
-      this.preparePieChartData();
-      this.prepareLineChartData();
-      this.prepareBarChartData();
-      this.cdr.detectChanges();
-    });
+    this.preparePieChartData();
+    this.prepareLineChartData();
+    this.prepareBarChartData();
   }
 
   private preparePieChartData() {
     const categoryData = new Map<string, number>();
     
+    if (!this.selectedMonth) return;
+    
+    // Filtrar por el mes seleccionado
     this.transactions.forEach(t => {
       if (t.amount > 0) {
-        const current = categoryData.get(t.category) || 0;
-        categoryData.set(t.category, current + t.amount);
+        const date = new Date(t.date);
+        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
+        
+        if (monthYear === this.selectedMonth) {
+          const current = categoryData.get(t.category) || 0;
+          categoryData.set(t.category, current + t.amount);
+        }
       }
     });
   
