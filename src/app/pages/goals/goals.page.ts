@@ -139,9 +139,9 @@ export class GoalsPage implements OnInit, OnDestroy {
   async addGoal() {
     const modal = await this.modalCtrl.create({
       component: AddGoalComponent,
-      breakpoints: [0, 0.75, 1],
-      initialBreakpoint: 0.75,
-      backdropBreakpoint: 0.75
+      breakpoints: [0, 1, 1],
+      initialBreakpoint: 1,
+      backdropBreakpoint: 1
     });
 
     await modal.present();

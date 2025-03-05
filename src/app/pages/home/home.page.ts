@@ -406,9 +406,9 @@ export class HomePage implements OnInit, AfterViewInit {
       componentProps: {
         isExpense
       },
-      breakpoints: [0, 0.75, 1],
-      initialBreakpoint: 0.75,
-      backdropBreakpoint: 0.75
+      breakpoints: [0, 1, 1], 
+      initialBreakpoint: 1,
+      backdropBreakpoint: 1
     });
 
     await modal.present();
@@ -438,9 +438,9 @@ export class HomePage implements OnInit, AfterViewInit {
         isExpense: transaction.amount > 0,
         transaction: transaction
       },
-      breakpoints: [0, 0.75, 1],
-      initialBreakpoint: 0.75,
-      backdropBreakpoint: 0.75
+      breakpoints: [0, 1, 1],
+      initialBreakpoint: 1,
+      backdropBreakpoint: 1
     });
 
     await modal.present();
