@@ -44,13 +44,22 @@ import { AbsPipe } from '../../pipes/abs.pipe';
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <!-- Alerta de validación -->
+      <div *ngIf="showValidationError" class="validation-error">
+        <ion-item color="danger" lines="none">
+          <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+          <ion-label>Por favor complete todos los campos obligatorios</ion-label>
+        </ion-item>
+      </div>
+      
       <ion-list>
         <ion-item>
           <ion-input 
             [label]="isExpense ? 'Nombre del gasto' : 'Nombre del ingreso'"
             labelPlacement="floating"
             [(ngModel)]="expense.name" 
-            [placeholder]="isExpense ? 'Nombre del gasto' : 'Nombre del ingreso'">
+            [placeholder]="isExpense ? 'Nombre del gasto' : 'Nombre del ingreso'"
+            [class.ion-invalid]="isFieldInvalid && !expense.name">
           </ion-input>
         </ion-item>
         
@@ -60,7 +69,8 @@ import { AbsPipe } from '../../pipes/abs.pipe';
             label="Cantidad"
             labelPlacement="floating"
             [(ngModel)]="expense.amount" 
-            placeholder="0.00">
+            placeholder="0.00"
+            [class.ion-invalid]="isFieldInvalid && !expense.amount">
           </ion-input>
         </ion-item>
 
@@ -68,7 +78,8 @@ import { AbsPipe } from '../../pipes/abs.pipe';
           <ion-select 
             label="Categoría"
             labelPlacement="floating"
-            [(ngModel)]="expense.category">
+            [(ngModel)]="expense.category"
+            [class.ion-invalid]="isFieldInvalid && !expense.category">
             <ion-select-option *ngFor="let cat of getCategories()" [value]="cat">
               {{cat}}
             </ion-select-option>
@@ -112,6 +123,18 @@ import { AbsPipe } from '../../pipes/abs.pipe';
       <ion-button expand="block" fill="clear" (click)="cancel()">Cancelar</ion-button>
     </ion-content>
   `,
+  styles: [`
+    .validation-error {
+      margin-bottom: 15px;
+    }
+    .required-fields-note {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding-left: 16px;
+    }
+  `],
   standalone: true,
   imports: [
     CommonModule,
@@ -127,13 +150,17 @@ import { AbsPipe } from '../../pipes/abs.pipe';
     IonSelect,
     IonSelectOption,
     IonButton,
-    IonToggle
+    IonToggle,
+    IonIcon
   ]
 })
 export class AddExpenseComponent {
   @Input() isExpense: boolean = true;
   @Input() isEdit: boolean = false;
   @Input() transaction?: Transaction;
+  
+  showValidationError = false;
+  isFieldInvalid = false;
   
   expense = {
     id: undefined as number | undefined,
@@ -144,6 +171,7 @@ export class AddExpenseComponent {
     recurrenceType: 'monthly',
     nextDueDate: ''
   };
+
 
   expenseCategories = [
     'Supermercado',
@@ -197,6 +225,15 @@ export class AddExpenseComponent {
         ...this.expense,
         isExpense: this.isExpense
       });
+    } else {
+      // Mostrar error de validación
+      this.showValidationError = true;
+      this.isFieldInvalid = true;
+      
+      // Ocultar el mensaje después de 3 segundos
+      setTimeout(() => {
+        this.showValidationError = false;
+      }, 3000);
     }
   }
 
