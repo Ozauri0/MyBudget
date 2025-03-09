@@ -118,3 +118,17 @@
     margin-top: 16px;
     margin-bottom: 8px;
   }
+  :host {
+    ion-alert.error-alert {
+      --background: #fff7f7;
+      
+      .alert-sub-title {
+        color: var(--ion-color-danger);
+        font-weight: 500;
+      }
+      
+      .alert-message {
+        color: var(--ion-color-danger);
+      }
+    }
+  }

@@ -22,6 +22,8 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
   transactions: GoalTransaction[] = [];
   originalGoal: Goal | null = null;
   private subscriptions: Subscription[] = [];
+  showValidationError = false;
+  showMaximunexceededError = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -187,27 +189,42 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
 
     const alert = await this.alertCtrl.create({
       header: 'Agregar Progreso',
+      message: this.showValidationError ? 'Por favor, ingrese una cantidad válida.' : '',
       inputs: [
-        {
-          name: 'amount',
-          type: 'number',
-          placeholder: 'Cantidad'
-        },
-        {
-          name: 'description',
-          type: 'text',
-          placeholder: 'Descripción (opcional)'
-        }
+      {
+        name: 'amount',
+        type: 'number',
+        placeholder: 'Cantidad'
+      },
+      {
+        name: 'description',
+        type: 'text',
+        placeholder: 'Descripción (opcional)'
+      }
       ],
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Agregar',
-          handler: async (data) => {
-            const amount = parseFloat(data.amount);
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'Agregar',
+        handler: async (data) => {
+        const amount = parseFloat(data.amount);
+        
+        if (isNaN(amount) || amount <= 0) {
+          this.showValidationError = true;
+          alert.message = 'Por favor, ingrese una cantidad válida mayor que cero.';
+          return false; // Prevents alert from closing
+        }
+        
+        if (amount > 9999999999) {
+          this.showValidationError = true;
+          alert.message = 'La cantidad excede el límite máximo permitido.';
+          return false; // Prevents alert from closing
+        }
+        
+        this.showValidationError = false;
             if (data.amount && amount > 0 && amount <= 9999999999 && this.goal) {
               try {
                 await this.goalsService.addGoalTransaction({
@@ -224,6 +241,7 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
                 console.error('Error adding progress:', error);
               }
             }
+            return true; // Close the alert after successful operation
           }
         }
       ]

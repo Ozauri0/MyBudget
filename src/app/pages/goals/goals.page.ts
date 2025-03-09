@@ -26,9 +26,16 @@ import { addOutline} from 'ionicons/icons';
     <ion-content class="ion-padding">
     <!-- Alerta de validación -->
       <div *ngIf="showValidationError" class="validation-error">
-        <ion-item color="danger" lines="none">
+        <ion-item color="danger" lines="none" style="--border-radius: 8px; border-radius: 8px;">
           <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
           <ion-label>Por favor complete todos los campos obligatorios</ion-label>
+        </ion-item>
+        </div>
+        <!-- Alerta de validación -->
+      <div *ngIf="showMaximunexceededError" class="validation-error">
+        <ion-item color="danger" lines="none" style="--border-radius: 8px; border-radius: 8px;">
+          <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+          <ion-label>El monto máxmimo es: 999999999</ion-label>
         </ion-item>
       </div>
       <!-- Formulario de creación de meta -->
@@ -73,6 +80,7 @@ import { addOutline} from 'ionicons/icons';
 })
 export class AddGoalComponent {
   showValidationError = false;
+  showMaximunexceededError = false;
   isFieldInvalid = false;
   goal = {
     name: '',
@@ -90,7 +98,15 @@ export class AddGoalComponent {
 
   submit() {
     const targetAmount = parseFloat(this.goal.targetAmount);
-    if (this.goal.name && targetAmount > 0 && targetAmount <= 999999999) {
+    if(targetAmount < 0 || targetAmount > 999999999){
+      this.isFieldInvalid = true;
+      this.showMaximunexceededError = true;
+      setTimeout(() => {
+        this.showMaximunexceededError = false;
+      }
+      , 3000);
+    }
+    else if (this.goal.name && targetAmount > 0 && targetAmount <= 999999999) {
       this.modalCtrl.dismiss(this.goal);
     } else {
       this.showValidationError = true;

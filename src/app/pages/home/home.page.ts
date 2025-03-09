@@ -46,9 +46,16 @@ import { AbsPipe } from '../../pipes/abs.pipe';
     <ion-content class="ion-padding">
       <!-- Alerta de validación -->
       <div *ngIf="showValidationError" class="validation-error">
-        <ion-item color="danger" lines="none">
+        <ion-item color="danger" lines="none" style="--border-radius: 8px; border-radius: 8px;">
           <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
           <ion-label>Por favor complete todos los campos obligatorios</ion-label>
+        </ion-item>
+        </div>
+        <!-- Alerta de validación -->
+      <div *ngIf="showMaximunexceededError" class="validation-error">
+        <ion-item color="danger" lines="none" style="--border-radius: 8px; border-radius: 8px;">
+          <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+          <ion-label>El monto máxmimo es: 999999999</ion-label>
         </ion-item>
       </div>
       
@@ -125,8 +132,11 @@ import { AbsPipe } from '../../pipes/abs.pipe';
   `,
   styles: [`
     .validation-error {
-      margin-bottom: 15px;
-    }
+      color: var(--ion-color-danger);
+      font-size: 12px;
+      margin-top: 4px;
+      border-radius: 15px;
+      }
     .required-fields-note {
       font-size: 12px;
       color: var(--ion-color-medium);
@@ -160,6 +170,7 @@ export class AddExpenseComponent {
   @Input() transaction?: Transaction;
   
   showValidationError = false;
+  showMaximunexceededError = false;
   isFieldInvalid = false;
   
   expense = {
@@ -220,7 +231,17 @@ export class AddExpenseComponent {
   }
 
   submit() {
-    if (this.expense.name && this.expense.amount && this.expense.category) {
+
+    if (parseFloat(this.expense.amount) > 999999999) {
+      this.showMaximunexceededError = true;
+      this.isFieldInvalid = true;
+      
+      // Ocultar el mensaje después de 3 segundos
+      setTimeout(() => {
+        this.showMaximunexceededError = false;
+      }, 3000);
+    }
+    else if (this.expense.name && this.expense.amount && this.expense.category) {
       this.modalCtrl.dismiss({
         ...this.expense,
         isExpense: this.isExpense

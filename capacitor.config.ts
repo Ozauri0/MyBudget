@@ -11,7 +11,11 @@ const config: CapacitorConfig = {
       iosKeychainPrefix: 'angular-sqlite-app-starter',
       androidIsEncryption: true,
       androidNewsArchitectureVersion: 2
-    }
+    },
+    EdgeToEdge: {
+      backgroundColor: "#000000", //Color del notch
+    },
+    
   }
 };
 
