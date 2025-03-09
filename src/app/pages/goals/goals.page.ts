@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { addOutline} from 'ionicons/icons';
 
+
+
 @Component({
   selector: 'app-add-goal',
   template: `
@@ -22,6 +24,14 @@ import { addOutline} from 'ionicons/icons';
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+    <!-- Alerta de validación -->
+      <div *ngIf="showValidationError" class="validation-error">
+        <ion-item color="danger" lines="none">
+          <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+          <ion-label>Por favor complete todos los campos obligatorios</ion-label>
+        </ion-item>
+      </div>
+      <!-- Formulario de creación de meta -->
       <ion-list>
         <ion-item>
           <ion-input 
@@ -56,17 +66,20 @@ import { addOutline} from 'ionicons/icons';
       <ion-button expand="block" (click)="submit()">
         Crear Meta
       </ion-button>
-    </ion-content>
+
   `,
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AddGoalComponent {
+  showValidationError = false;
+  isFieldInvalid = false;
   goal = {
     name: '',
     targetAmount: '',
     deadline: '',
     description: ''
+  
   };
 
   constructor(private modalCtrl: ModalController) {}
@@ -80,7 +93,12 @@ export class AddGoalComponent {
     if (this.goal.name && targetAmount > 0 && targetAmount <= 999999999) {
       this.modalCtrl.dismiss(this.goal);
     } else {
-      console.error('El monto objetivo debe ser un número positivo y no mayor a 99 millones.');
+      this.showValidationError = true;
+      this.isFieldInvalid = true;
+      setTimeout(() => {
+        this.showValidationError = false;
+      }, 3000);
+      
     }
   }
   }
