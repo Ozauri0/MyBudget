@@ -1,6 +1,6 @@
 <app-header [title]="'Mi Perfil'"></app-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="profile-container" *ngIf="userData">
     <!-- Avatar con iniciales -->
     <div class="profile-avatar" [style.background]="gradients[selectedGradient - 1].gradient">

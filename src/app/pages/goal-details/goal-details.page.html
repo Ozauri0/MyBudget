@@ -1,20 +1,6 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Detalles de Meta</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="saveChanges()" color="primary">
-        <ion-icon name="save-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header [title]="'Detalles de meta'"></app-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   
   <div class="details-container" *ngIf="goal">
     <ion-card class="goal-card">
