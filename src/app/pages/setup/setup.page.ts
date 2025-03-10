@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { EventsService } from '../../services/events.service';
+import { CurrencyService, CurrencyConfig } from '../../services/currency.service';
 
 @Component({
   selector: 'app-setup',
@@ -17,15 +18,25 @@ export class SetupPage implements OnInit {
   userName: string = '';
   userLastName: string = '';
   baseSalary: number = 0;
+  currencies: CurrencyConfig[] = [];
+  selectedCurrency: CurrencyConfig = {} as CurrencyConfig;
+  isEditing: boolean = true; // Siempre verdadero en setup para poder editar la moneda
 
   constructor(
     private userService: UserService,
     private router: Router,
-    private events: EventsService
+    private events: EventsService,
+    private currencyService: CurrencyService
   ) {}
 
   ngOnInit() {
     this.checkExistingUser();
+    this.loadCurrencies();
+  }
+
+  loadCurrencies() {
+    this.currencies = this.currencyService.getAllCurrencies();
+    this.selectedCurrency = this.currencyService.getCurrentCurrency();
   }
 
   async checkExistingUser() {
@@ -35,6 +46,11 @@ export class SetupPage implements OnInit {
     }
   }
 
+  onCurrencyChange(currency: CurrencyConfig) {
+    this.selectedCurrency = currency;
+    this.currencyService.setCurrentCurrency(currency);
+  }
+
   async onSubmit() {
     if (this.userName) {
       try {
@@ -42,6 +58,8 @@ export class SetupPage implements OnInit {
           name: this.userName + ' ' + this.userLastName,
           baseSalary: this.baseSalary
         });
+        // Guardar la moneda seleccionada
+        this.currencyService.setCurrentCurrency(this.selectedCurrency);
         this.events.emitUserCreated();
         this.router.navigate(['/tabs/home']);
       } catch (error) {

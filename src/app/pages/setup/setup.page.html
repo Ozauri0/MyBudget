@@ -1,41 +1,52 @@
+<!-- setup.page.html -->
 <ion-content class="ion-padding setup-content">
   <div class="form-container">
-    <h1>Configuración Inicial</h1>
+    <h1>¡Bienvenido!</h1>
     <form (ngSubmit)="onSubmit()">
       <ion-item>
-        <ion-label position="floating">¿Cuál es tu nombre?</ion-label>
         <ion-input 
           type="text"
           [(ngModel)]="userName" 
           name="userName" 
           required
-          label="Nombre"
+          label="¿Cuál es tu nombre?"
           labelPlacement="floating"
-          fill="solid"
-          placeholder="Escribe tu nombre">
+          placeholder="Escribe tu nombre"
+          [clearInput]="true">
         </ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">¿Cuál es tu apellido?</ion-label>
         <ion-input 
           type="text"
           [(ngModel)]="userLastName" 
           name="userLastName" 
           required
-          label="Apellido"
+          label="¿Cuál es tu apellido?"
           labelPlacement="floating"
-          fill="solid"
-          placeholder="Escribe tu apellido">
+          placeholder="Escribe tu apellido"
+          [clearInput]="true">
         </ion-input>
       </ion-item>
 
+      <ion-item class="currency-item">
+        <ion-label position="floating">¿Cuál es tu moneda?</ion-label>
+        <ion-select
+          [(ngModel)]="selectedCurrency"
+          name="currency"
+          (ionChange)="onCurrencyChange($event.detail.value)"
+          interface="action-sheet"
+          [interfaceOptions]="{ header: 'Seleccionar Moneda' }"
+          placeholder="Selecciona tu moneda">
+          <ion-select-option *ngFor="let currency of currencies" [value]="currency">
+            {{currency.symbol}} - {{currency.name}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-
-      <ion-button expand="block" type="submit" class="ion-margin-top">
+      <ion-button expand="block" type="submit" [disabled]="!userName || !userLastName || !selectedCurrency.symbol">
         Comenzar
       </ion-button>
     </form>
   </div>
 </ion-content>
-

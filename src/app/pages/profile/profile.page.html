@@ -54,21 +54,23 @@
         Editar Perfil
       </ion-button>
 
-      <ion-button expand="block"
-      color="secondary"
-      (click)="importDatabase()"
-      class="import-button">
-<ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-Importar datos
-</ion-button>
+      <div class="data-buttons">
+        <ion-button expand="block"
+          color="secondary"
+          (click)="importDatabase()"
+          class="import-button">
+          <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+          Importar datos
+        </ion-button>
 
-      <ion-button expand="block"
-            color="tertiary"
-            (click)="exportDatabase()"
-            class="export-button">
-  <ion-icon name="download-outline" slot="start"></ion-icon>
-  Exportar datos
-</ion-button>
+        <ion-button expand="block"
+          color="tertiary"
+          (click)="exportDatabase()"
+          class="export-button">
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Exportar datos
+        </ion-button>
+      </div>
 
       <ng-container *ngIf="isEditing">
         <ion-button expand="block"
