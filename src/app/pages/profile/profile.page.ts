@@ -25,6 +25,8 @@ import { addIcons } from 'ionicons';
 import { pencilOutline, colorPaletteOutline, downloadOutline, cloudUploadOutline } from 'ionicons/icons';
 import { EventsService } from '../../services/events.service';
 import { CurrencyService, CurrencyConfig } from '../../services/currency.service';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Data } from '@angular/router';
 
 
 interface GradientBackground {
@@ -210,7 +212,7 @@ export class ProfilePage implements OnInit {
     await alert.present();
   }
 
-  async exportDatabase() {
+  async exportDatabase(): Promise<void> {
     try {
       const confirmAlert = await this.alertCtrl.create({
         header: 'Exportar base de datos',
@@ -224,11 +226,35 @@ export class ProfilePage implements OnInit {
             text: 'Exportar',
             handler: async () => {
               try {
-                await this.database.exportDatabase();
-                const path = await this.database.getExportPath();
+                // Generar nombre del archivo con timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const fileName = `mybudget_backup_${timestamp}.db`;
+                
+                // Obtener datos de la base de datos como string base64
+                const dbData: string = await this.database.exportDatabase();
+                
+                // Si no retorna una cadena, mostrar error
+                if (!dbData) {
+                  throw new Error("No se pudieron exportar los datos de la base de datos");
+                }
+                
+                // Guardar el archivo usando Filesystem
+                const result = await Filesystem.writeFile({
+                  path: fileName,
+                  data: dbData, // Ahora dbData es explícitamente string
+                  directory: Directory.Documents,
+                  recursive: true
+                });
+                
+                // Obtener la ruta URI para mostrar al usuario
+                const fileInfo = await Filesystem.getUri({
+                  path: fileName,
+                  directory: Directory.Documents
+                });
+                
                 const successAlert = await this.alertCtrl.create({
                   header: 'Éxito',
-                  message: `Base de datos exportada correctamente.\nPuedes encontrar el archivo en:\n${path}`,
+                  message: `Base de datos exportada correctamente.\nPuedes encontrar el archivo en:\n${fileInfo.uri}`,
                   buttons: ['OK']
                 });
                 await successAlert.present();
@@ -242,6 +268,7 @@ export class ProfilePage implements OnInit {
                 await errorAlert.present();
               }
             }
+            
           }
         ]
       });
@@ -250,6 +277,7 @@ export class ProfilePage implements OnInit {
       console.error('Error mostrando diálogo:', error);
     }
   }
+
   async importDatabase() {
     try {
       const confirmAlert = await this.alertCtrl.create({
@@ -283,15 +311,36 @@ export class ProfilePage implements OnInit {
                       await errorAlert.present();
                       return;
                     }
-  
+    
                     try {
-                      // Obtener la ruta del archivo
-                      const filePath = (file as any).path || file.name;
+                      // Leer el archivo como ArrayBuffer
+                      const arrayBuffer = await file.arrayBuffer();
+                      const base64Data = this.arrayBufferToBase64(arrayBuffer);
                       
-                      // Importar base de datos
-                      await this.database.importDatabase(filePath);
+                      // Guardar temporalmente en caché
+                      const tempFileName = `temp_import_${new Date().getTime()}.db`;
+                      await Filesystem.writeFile({
+                        path: tempFileName,
+                        data: base64Data, // base64Data es una cadena, por lo que es compatible
+                        directory: Directory.Cache
+                      });
+                      
+                      // Obtener URI del archivo temporal
+                      const fileInfo = await Filesystem.getUri({
+                        path: tempFileName,
+                        directory: Directory.Cache
+                      });
+                      
+                      // Importar la base de datos con la misma lógica actual
+                      await this.database.importDatabase(fileInfo.uri);
                       await this.loadUserData();
-  
+                      
+                      // Eliminar archivo temporal
+                      await Filesystem.deleteFile({
+                        path: tempFileName,
+                        directory: Directory.Cache
+                      });
+                      
                       const successAlert = await this.alertCtrl.create({
                         header: 'Éxito',
                         message: 'Base de datos importada correctamente',
@@ -309,7 +358,7 @@ export class ProfilePage implements OnInit {
                     }
                   }
                 };
-  
+    
                 fileInput.click();
               } catch (error) {
                 console.error('Error seleccionando archivo:', error);
@@ -328,6 +377,17 @@ export class ProfilePage implements OnInit {
     } catch (error) {
       console.error('Error mostrando diálogo:', error);
     }
+  }
+  
+  // Método auxiliar para convertir ArrayBuffer a Base64
+  private arrayBufferToBase64(buffer: ArrayBuffer): string {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
   }
 
   async cancelEdit() {

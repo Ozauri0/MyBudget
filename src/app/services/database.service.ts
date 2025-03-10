@@ -5,6 +5,7 @@ import { Transaction } from '../models/transaction.model';
 import { Goal } from '../models/goal.model';
 import { GoalTransaction } from '../models/goal-transaction.model';
 import { EventsService } from '../services/events.service';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
@@ -321,7 +322,7 @@ export class DatabaseService {
     return result.values[0] as GoalTransaction;
   }
 
-  async exportDatabase(): Promise<void> {
+  async exportDatabase(): Promise<string> {
     try {
       if (!this.initialized) await this.initializePlugin();
   
@@ -333,15 +334,23 @@ export class DatabaseService {
       console.log('Nombre del archivo:', backupName);
   
       try {
-        // Obtener ruta de destino en Descargas
-        const downloadPath = `/storage/emulated/0/Download/${backupName}`;
+        // Obtener ruta de destino en el directorio de documentos
+        const downloadPath = `/storage/emulated/0/Documents/${backupName}`;
         
-        // Ejecutar backup directo a la carpeta de descargas
+        // Ejecutar backup directo a la carpeta de documentos
         await this.db.query('PRAGMA journal_mode = DELETE');
         await this.db.query(`VACUUM INTO '${downloadPath}'`);
         
         console.log('Base de datos exportada exitosamente');
         console.log('La base de datos se encuentra en:', downloadPath);
+  
+        // Leer el archivo exportado y convertirlo a base64
+        const fileData = await Filesystem.readFile({
+          path: backupName,
+          directory: Directory.Documents
+        });
+  
+        return fileData.data as string; // Retornar los datos en base64
   
       } catch (copyError) {
         console.error('Error copiando archivo:', copyError);
@@ -399,7 +408,8 @@ export class DatabaseService {
         DELETE FROM users;
       `);
   
-      const fullPath = `/storage/emulated/0/Download/${newDbPath}`;
+      // Obtener la ruta correcta sin el prefijo file:///
+      const fullPath = newDbPath.replace('file:///', '');
   
       try {
         // Primero intentar adjuntar la base de datos
@@ -424,7 +434,7 @@ export class DatabaseService {
         console.log('Base de datos importada exitosamente');
         // Emitir evento después de importación exitosa
         this.events.emitDatabaseImported();
-
+  
       } catch (importError) {
         console.error('Error durante la importación:', importError);
         throw importError;
