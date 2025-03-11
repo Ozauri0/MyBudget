@@ -82,6 +82,7 @@ export class AddGoalComponent {
   showValidationError = false;
   showMaximunexceededError = false;
   isFieldInvalid = false;
+  showCompletedGoals = false;
   goal = {
     name: '',
     targetAmount: '',
@@ -128,6 +129,7 @@ export class AddGoalComponent {
 })
 export class GoalsPage implements OnInit, OnDestroy {
   goals: Goal[] = [];
+  showCompletedGoals = false;
   private subscriptions: Subscription[] = [];
   addOutline = addOutline;
 
@@ -270,5 +272,18 @@ export class GoalsPage implements OnInit, OnDestroy {
 
   getProgressPercentage(goal: Goal): number {
     return (goal.currentAmount / goal.targetAmount) * 100;
+  }
+  get filteredGoals() {
+    return this.showCompletedGoals 
+      ? this.goals 
+      : this.goals.filter(goal => this.getProgressPercentage(goal) < 100);
+  }
+  
+  getTotalAmount(): number {
+    return this.goals.reduce((sum, goal) => sum + goal.currentAmount, 0);
+  }
+  
+  getCompletedGoals(): number {
+    return this.goals.filter(goal => this.getProgressPercentage(goal) >= 100).length;
   }
 }

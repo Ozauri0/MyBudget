@@ -1,281 +1,157 @@
-ion-header {
-  ion-toolbar {
-    --background: transparent;
-    --border-width: 0;
-    
-    ion-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--ion-color-white);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  .stat-label {
+    color: var(--ion-color-medium);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .stat-value {
+    color: var(--ion-color-dark);
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 4px;
+  
+  .toggle-label {
+    color: var(--ion-color-medium);
+    font-size: 14px;
+  }
+  
+  ion-toggle {
+    --handle-background: var(--ion-color-medium);
+    --handle-background-checked: var(--ion-color-medium);
+    --background: var(--ion-color-light-medium);
+    --background-checked: var(--ion-color-primary);
+    z-index: 1;
   }
 }
 
 .goals-container {
-  padding: 16px;
-  background: var(--ion-color-light);
-  min-height: 100%;
-}
-
-.goal-card {
-  margin-bottom: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  background: #ffffff;
-  overflow: hidden;
-  position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
-  opacity: 0;
-  animation: fadeIn 0.3s ease-out forwards;
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
-
-  ion-card-header {
-    padding: 20px 20px 12px;
-  }
-}
-
-.header-content {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 16px;
 }
 
-.goal-info {
-  flex: 1;
-}
-
-.goal-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--ion-color-dark);
-  margin-bottom: 8px;
-}
-
-.goal-deadline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ion-color-medium);
-  font-size: 0.9rem;
-  margin-top: 4px;
-
-  ion-icon {
-    font-size: 16px;
+.goal-card {
+  margin: 0;
+  background: var(--ion-color-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  
+  .card-content {
+    padding: 16px;
   }
-}
-
-.goal-description {
-  margin: 12px 0 8px;
-  color: var(--ion-color-medium);
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.action-buttons {
-  .delete-button {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    height: 36px;
-    margin: 0;
+  
+  .goal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
     
-    &:hover {
-      --background: var(--ion-color-danger-tint);
-      --color: var(--ion-color-danger);
+    .icon-container {
+      background: var(--ion-color-primary-tint);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+        font-size: 20px;
+      }
+    }
+    
+    ion-card-title {
+      flex: 1;
+      color: var(--ion-color-dark);
+      font-size: 16px;
+      margin: 0;
     }
   }
-}
-
-.progress-section {
-  padding: 0 4px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
   
-  .amount-info {
+  .amount-container {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    margin-bottom: 12px;
     
     .current-amount {
-      font-size: 1.2rem;
-      font-weight: 600;
       color: var(--ion-color-dark);
+      font-size: 20px;
+      font-weight: 600;
     }
     
     .target-amount {
-      font-size: 0.9rem;
       color: var(--ion-color-medium);
+      font-size: 14px;
     }
   }
   
-  .percentage {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--ion-color-primary);
+  .progress-bar {
+    height: 6px;
+    background: var(--ion-color-light-shade);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
     
-    &.completed {
-      color: var(--ion-color-success);
+    .progress-fill {
+      height: 100%;
+      background: var(--ion-color-primary);
+      transition: width 0.3s ease;
+      
+      &.completed {
+        background: var(--ion-color-success);
+      }
     }
   }
-}
-
-.progress-bar-container {
-  margin-bottom: 20px;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background-color: var(--ion-color-light);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: var(--ion-color-primary);
-  transition: width 0.3s ease, background-color 0.3s ease;
   
-  &.completed {
-    background-color: var(--ion-color-success);
+  .progress-percentage {
+    text-align: right;
+    color: var(--ion-color-medium);
+    font-size: 14px;
   }
 }
 
-.progress-button {
-  --border-radius: 12px;
-  --box-shadow: none;
+.delete-button {
+  --color: var(--ion-color-danger);
+  --padding-start: 8px;
+  --padding-end: 8px;
+  height: 36px;
   margin: 0;
-  height: 44px;
-  font-weight: 500;
-  
-  &.completed {
-    --background: var(--ion-color-success);
-    --background-hover: var(--ion-color-success-shade);
-  }
-  
-  ion-icon {
-    margin-right: 8px;
-  }
 }
 
 .add-goal-button {
-  --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.4);
+  --background: var(--ion-color-primary);
+  --background-hover: var(--ion-color-primary-shade);
+  --background-activated: var(--ion-color-primary-shade);
   margin-bottom: 16px;
   margin-right: 16px;
-  
-  &:hover {
-    --box-shadow: 0 6px 20px rgba(var(--ion-color-primary-rgb), 0.5);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-// Aquí comienza el diseño del alert
-.custom-alert {
-  --backdrop-opacity: 0.6;
-  --background: #ffffff;
-
-  .alert-wrapper {
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    max-width: 90%;
-    width: 320px;
-  }
-
-  .alert-head {
-    padding: 20px 20px 0;
-    text-align: center;
-
-    h2 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--ion-color-dark);
-      margin: 0;
-    }
-  }
-
-  .alert-input-group {
-    padding: 20px;
-  }
-
-  .alert-input-wrapper {
-    margin-bottom: 16px;
-  }
-
-  .alert-input, .alert-textarea {
-    border: 1px solid var(--ion-color-light);
-    border-radius: 8px;
-    background-color: var(--ion-color-light);
-    color: var(--ion-color-dark);
-    padding: 12px;
-    font-size: 1rem;
-    width: 100%;
-    transition: border-color 0.2s, background-color 0.2s;
-
-    &:focus {
-      border-color: var(--ion-color-primary);
-      background-color: #ffffff;
-      outline: none;
-    }
-
-    &::placeholder {
-      color: var(--ion-color-medium);
-    }
-  }
-
-  .alert-textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-
-  .alert-button-group {
-    padding: 0 20px 20px;
-    justify-content: space-between;
-
-    .alert-button {
-      margin: 0;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      text-transform: none;
-      padding: 12px 24px;
-
-      &.custom-alert-button-cancel {
-        --background: var(--ion-color-light);
-        --color: var(--ion-color-dark);
-        
-        &:hover {
-          --background: var(--ion-color-light-shade);
-        }
-      }
-
-      &.custom-alert-button-confirm {
-        --background: var(--ion-color-primary);
-        --color: var(--ion-color-primary-contrast);
-        
-        &:hover {
-          --background: var(--ion-color-primary-shade);
-        }
-      }
-    }
-  }
 }

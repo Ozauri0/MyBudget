@@ -1,53 +1,61 @@
 <app-header [title]="'Mis metas'"></app-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Stats Section -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <span class="stat-label">Total</span>
+      <span class="stat-value">{{getTotalAmount() | currency:'':'symbol':'1.0-0'}}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Metas Cumplidas</span>
+      <span class="stat-value">{{getCompletedGoals()}}/{{goals.length}}</span>
+    </div>
+  </div>
+
+  <!-- Toggle Section -->
+  <div class="toggle-container">
+    <span class="toggle-label">Mostrar metas cumplidas</span>
+    <ion-toggle [(ngModel)]="showCompletedGoals"></ion-toggle>
+  </div>
+
+  <!-- Goals List -->
   <div class="goals-container">
-    <ion-card *ngFor="let goal of goals" class="goal-card" (click)="navigateToDetails(goal)">
+    <ion-card *ngFor="let goal of filteredGoals" 
+              class="goal-card" 
+              [class.completed]="getProgressPercentage(goal) >= 100"
+              (click)="navigateToDetails(goal)">
       <ion-ripple-effect></ion-ripple-effect>
       
-      <ion-card-header>
-        <div class="header-content">
-          <div class="goal-info">
-            <ion-card-title class="goal-title">{{goal.name}}</ion-card-title>
-            <ion-card-subtitle *ngIf="goal.deadline" class="goal-deadline">
-              <ion-icon name="calendar-outline"></ion-icon>
-              {{goal.deadline | date:'dd/MM/yyyy'}}
-            </ion-card-subtitle>
-            <p *ngIf="goal.description" class="goal-description">
-              {{goal.description}}
-            </p>
+      <div class="card-content">
+        <div class="goal-header">
+          <div class="icon-container">
+            <ion-icon name="cart-outline"></ion-icon>
           </div>
-          <div class="action-buttons">
-            <ion-button fill="clear" color="danger" (click)="deleteGoal($event, goal)" class="delete-button">
-              <ion-icon name="trash-outline" size="small"></ion-icon>
-            </ion-button>
+          <ion-card-title>{{goal.name}}</ion-card-title>
+          <ion-button fill="clear" 
+                      (click)="deleteGoal($event, goal)" 
+                      class="delete-button">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="amount-container">
+          <span class="current-amount">{{goal.currentAmount | currency:'':'symbol':'1.0-0'}}</span>
+          <span class="target-amount">de {{goal.targetAmount | currency:'':'symbol':'1.0-0'}}</span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" 
+               [style.width]="getProgressPercentage(goal) + '%'"
+               [class.completed]="getProgressPercentage(goal) >= 100">
           </div>
         </div>
-      </ion-card-header>
 
-      <ion-card-content>
-        <div class="progress-section">
-          <div class="progress-info">
-            <div class="amount-info">
-              <span class="current-amount">{{goal.currentAmount | currency:'':'symbol':'1.0-0'}}</span>
-              <span class="target-amount">de {{goal.targetAmount | currency:'':'symbol':'1.0-0'}}</span>
-            </div>
-            <span class="percentage" [class.completed]="getProgressPercentage(goal) >= 100">
-              {{getProgressPercentage(goal) | number:'1.0-0'}}%
-            </span>
-          </div>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar">
-              <div class="progress-fill" 
-                   [style.width]="getProgressPercentage(goal) + '%'"
-                   [class.completed]="getProgressPercentage(goal) >= 100">
-              </div>
-            </div>
-          </div>
-
+        <div class="progress-percentage">
+          {{getProgressPercentage(goal) | number:'1.0-0'}}%
         </div>
-      </ion-card-content>
+      </div>
     </ion-card>
   </div>
 
