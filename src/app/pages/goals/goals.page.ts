@@ -45,7 +45,8 @@ import { addOutline} from 'ionicons/icons';
             label="Nombre de la meta"
             labelPlacement="floating"
             [(ngModel)]="goal.name" 
-            placeholder="Nombre de la meta">
+            placeholder="Nombre de la meta"
+            autocapitalize="words">
           </ion-input>
         </ion-item>
         

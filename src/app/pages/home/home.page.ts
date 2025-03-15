@@ -66,7 +66,8 @@ import { AbsPipe } from '../../pipes/abs.pipe';
             labelPlacement="floating"
             [(ngModel)]="expense.name" 
             [placeholder]="isExpense ? 'Nombre del gasto' : 'Nombre del ingreso'"
-            [class.ion-invalid]="isFieldInvalid && !expense.name">
+            [class.ion-invalid]="isFieldInvalid && !expense.name"
+            autocapitalize="words">
           </ion-input>
         </ion-item>
         
