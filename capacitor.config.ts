@@ -2,7 +2,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.app',
+  appId: 'com.mybudget.app',
   appName: 'MyBudget',
   webDir: 'www/browser',
   plugins: {
