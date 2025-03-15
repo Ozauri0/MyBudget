@@ -17,8 +17,8 @@
 ## 🛠️ Tecnologías utilizadas
 
 - **Angular 19** - Framework de frontend
-- **Ionic 8** - Framework para aplicaciones móviles híbridas
-- **Capacitor 6** - Compilación nativa y acceso a APIs nativas
+- **Ionic 7** - Framework para aplicaciones móviles híbridas
+- **Capacitor 7** - Compilación nativa y acceso a APIs nativas
 - **SQLite** - Base de datos local
 - **ECharts 5** - Visualización de datos y gráficos
 - **RxJS** - Programación reactiva para manejo de eventos
