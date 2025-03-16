@@ -20,12 +20,14 @@ import {
 
 } from '@ionic/angular/standalone';
 import { DatabaseService } from '../../services/database.service';
+import { HeaderComponent } from 'src/app/components/header/header.component';
 import { CurrencyService } from '../../services/currency.service';
 import { Transaction } from '../../models/transaction.model';
 import { NgxEchartsModule } from 'ngx-echarts';
 import type { EChartsOption } from 'echarts';
 import { EventsService } from '../../services/events.service';
 import { Subscription, merge } from 'rxjs';
+import { h } from 'ionicons/dist/types/stencil-public-runtime';
 
 @Component({
   selector: 'app-accounts',
@@ -51,6 +53,7 @@ import { Subscription, merge } from 'rxjs';
     IonSelectOption,
     IonItem,
     IonLabel,
+    HeaderComponent
   ]
 })
 export class AccountsPage implements OnInit, OnDestroy {
