@@ -1,4 +1,4 @@
-package com.example.app;
+package com.mybudget.app;
 
 import com.getcapacitor.BridgeActivity;
 
