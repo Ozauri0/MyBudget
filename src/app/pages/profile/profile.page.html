@@ -15,34 +15,39 @@
     <!-- Formulario de perfil -->
     <ion-list class="profile-form">
       <!-- Nombre -->
-      <ion-item>
-        <ion-input
-          label="Nombre"
-          labelPlacement="floating"
-          [(ngModel)]="userData.name"
-          [readonly]="!isEditing"
-          autocapitalize="words">
-        </ion-input>
-      </ion-item>
+      <div class="field-container">
+        <div class="field-label">Nombre</div>
+        <ion-item lines="none">
+          <div *ngIf="!isEditing" class="non-editable-value">{{userData.name}}</div>
+          <ion-input
+            *ngIf="isEditing"
+            [(ngModel)]="userData.name"
+            autocapitalize="words">
+          </ion-input>
+        </ion-item>
+      </div>
 
       <!-- Moneda -->
-      <ion-item>
-        <ion-input
-          label="Moneda"
-          labelPlacement="floating"
-          [readonly]="true"
-          [value]="selectedCurrency.symbol + ' - ' + selectedCurrency.name">
-        </ion-input>
-        <ion-select *ngIf="isEditing"
-          [(ngModel)]="selectedCurrency"
-          (ionChange)="onCurrencyChange($event.detail.value)"
-          interface="action-sheet"
-          [interfaceOptions]="{ header: 'Seleccionar Moneda' }">
-          <ion-select-option *ngFor="let currency of currencies" [value]="currency">
-            {{currency.symbol}} - {{currency.name}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="field-container">
+        <div class="field-label">Moneda</div>
+        <ion-item lines="none">
+          <div *ngIf="!isEditing" class="non-editable-value">{{selectedCurrency.symbol}} - {{selectedCurrency.name}}</div>
+          <ion-input
+            *ngIf="isEditing"
+            readonly
+            [value]="selectedCurrency.symbol + ' - ' + selectedCurrency.name">
+          </ion-input>
+          <ion-select *ngIf="isEditing"
+            [(ngModel)]="selectedCurrency"
+            (ionChange)="onCurrencyChange($event.detail.value)"
+            interface="action-sheet"
+            [interfaceOptions]="{ header: 'Seleccionar Moneda' }">
+            <ion-select-option *ngFor="let currency of currencies" [value]="currency">
+              {{currency.symbol}} - {{currency.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
     </ion-list>
 
     <!-- Botones de acción -->

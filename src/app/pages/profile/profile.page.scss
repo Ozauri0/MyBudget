@@ -340,6 +340,34 @@
   }
 }
 
+.field-container {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin-left: 16px;
+  margin-bottom: 4px;
+}
+
+.non-editable-value {
+  padding: 8px 0;
+  color: var(--ion-text-color);
+  font-size: 16px;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  --background: var(--ion-color-light-shade);
+  border-radius: 8px;
+}
+
+ion-list {
+  background: transparent;
+}
+
 :root {
   --gradient-1: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   --gradient-2: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
