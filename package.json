@@ -1,8 +1,8 @@
 {
   "name": "MyBudget",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "version": "1.1.0",
+  "author": "Christian Ferrer",
+  "homepage": "https://christianferrer.me",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -70,5 +70,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.6.3"
   },
-  "description": "An Ionic project"
+  "description": "MyBudget is a simple budget management application that allows you to track your income and expenses. It provides a user-friendly interface to help you manage your finances effectively."
 }
