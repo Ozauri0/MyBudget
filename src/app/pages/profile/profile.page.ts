@@ -240,16 +240,16 @@ export class ProfilePage implements OnInit {
                 
                 // Guardar el archivo usando Filesystem
                 const result = await Filesystem.writeFile({
-                  path: fileName,
-                  data: dbData, // Ahora dbData es explícitamente string
-                  directory: Directory.Documents,
+                  path: `Download/${fileName}`,
+                  data: dbData, 
+                  directory: Directory.ExternalStorage,
                   recursive: true
                 });
                 
                 // Obtener la ruta URI para mostrar al usuario
                 const fileInfo = await Filesystem.getUri({
-                  path: fileName,
-                  directory: Directory.Documents
+                  path: `Download/${fileName}`,
+                  directory: Directory.ExternalStorage
                 });
                 
                 const successAlert = await this.alertCtrl.create({
