@@ -70,6 +70,16 @@ export class AccountsPage implements OnInit, OnDestroy {
   pieChartOption: EChartsOption = {};
   lineChartOption: EChartsOption = {};
   barChartOption: EChartsOption = {};
+  
+  // Mapa para mantener colores consistentes por categoría
+  private categoryColors: Map<string, string> = new Map();
+  
+  // Colores predefinidos para categorías
+  private colorPalette: string[] = [
+    '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', 
+    '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#4ec2c9',
+    '#f9917b', '#a5d16f', '#8378ea', '#e06343', '#44c0c1'
+  ];
 
   constructor(
     private database: DatabaseService,
@@ -162,7 +172,16 @@ export class AccountsPage implements OnInit, OnDestroy {
     
     if (!this.selectedMonth) return;
     
-    // Filtrar por el mes seleccionado
+    // Primero, recopilamos todas las categorías de todas las transacciones
+    // para asignar colores consistentes
+    this.transactions.forEach(t => {
+      if (t.amount > 0 && !this.categoryColors.has(t.category)) {
+        const colorIndex = this.categoryColors.size % this.colorPalette.length;
+        this.categoryColors.set(t.category, this.colorPalette[colorIndex]);
+      }
+    });
+    
+    // Luego, filtramos por el mes seleccionado para los datos del gráfico
     this.transactions.forEach(t => {
       if (t.amount > 0) {
         const date = new Date(t.date);
@@ -249,6 +268,9 @@ export class AccountsPage implements OnInit, OnDestroy {
         data: Array.from(categoryData.entries()).map(([name, value]) => ({
           name,
           value,
+          itemStyle: {
+            color: this.categoryColors.get(name)
+          },
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
