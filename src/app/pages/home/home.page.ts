@@ -95,6 +95,15 @@ import { AbsPipe } from '../../pipes/abs.pipe';
         </ion-item>
 
         <ion-item>
+          <ion-input 
+            type="date"
+            label="Fecha"
+            labelPlacement="floating"
+            [(ngModel)]="expense.date">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
           <ion-toggle [(ngModel)]="expense.isRecurrent" labelPlacement="start">
             ¿Es recurrente?
           </ion-toggle>
@@ -179,6 +188,7 @@ export class AddExpenseComponent {
     name: '',
     amount: '',
     category: '',
+    date: new Date().toISOString().split('T')[0], // Fecha por defecto (hoy)
     isRecurrent: false,
     recurrenceType: 'monthly',
     nextDueDate: ''
@@ -215,6 +225,7 @@ export class AddExpenseComponent {
         name: this.transaction.name,
         amount: Math.abs(this.transaction.amount).toString(),
         category: this.transaction.category,
+        date: new Date(this.transaction.date).toISOString().split('T')[0],
         isRecurrent: this.transaction.isRecurrent || false,
         recurrenceType: this.transaction.recurrenceType || 'monthly',
         nextDueDate: this.transaction.nextDueDate || ''
@@ -473,19 +484,35 @@ export class HomePage implements OnInit, AfterViewInit {
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
-    const transamount = parseFloat(data.amount); // Se agrega la variable transamount para almacenar el valor de data.amount en formato numérico
-    if (data && transamount > 0 && transamount <= 99999999) { 
-      const transaction: Transaction = {
-        name: data.name,
-        amount: parseFloat(data.amount) * (isExpense ? 1 : -1),
-        category: data.category,
-        date: new Date().toISOString(),
-        isRecurrent: data.isRecurrent,
-        recurrenceType: data.recurrenceType,
-        nextDueDate: data.nextDueDate
-      };
-      await this.database.addTransaction(transaction);
-      await this.loadTransactions();
+    if (data) {
+      const transamount = parseFloat(data.amount);
+      if (transamount > 0 && transamount <= 99999999) { 
+        // Construir una fecha correctamente formateada usando la zona horaria local
+        let transactionDate: Date;
+        if (data.date) {
+          const dateParts = data.date.split('-');
+          transactionDate = new Date(
+            parseInt(dateParts[0]), 
+            parseInt(dateParts[1]) - 1, 
+            parseInt(dateParts[2]),
+            12, 0, 0
+          );
+        } else {
+          transactionDate = new Date();
+        }
+        
+        const transaction: Transaction = {
+          name: data.name,
+          amount: parseFloat(data.amount) * (isExpense ? 1 : -1),
+          category: data.category,
+          date: transactionDate.toISOString(),
+          isRecurrent: data.isRecurrent,
+          recurrenceType: data.recurrenceType,
+          nextDueDate: data.nextDueDate
+        };
+        await this.database.addTransaction(transaction);
+        await this.loadTransactions();
+      }
     }
   }
 
@@ -510,15 +537,28 @@ export class HomePage implements OnInit, AfterViewInit {
       if (data.action === 'delete') {
         await this.deleteTransaction(data.id);
       }
-      const editedamount = parseFloat(data.amount); // Se agrega la variable editedamount para almacenar el valor de data.amount en formato numérico 
+      const editedamount = parseFloat(data.amount);
       if(editedamount > 0 && editedamount <=999999999){
+        // Construir una fecha correctamente formateada usando la zona horaria local
+        let transactionDate: Date;
+        if (data.date) {
+          const dateParts = data.date.split('-');
+          transactionDate = new Date(
+            parseInt(dateParts[0]), 
+            parseInt(dateParts[1]) - 1, 
+            parseInt(dateParts[2]),
+            12, 0, 0
+          );
+        } else {
+          transactionDate = new Date();
+        }
         
         const updatedTransaction: Transaction = {
           id: transaction.id,
           name: data.name,
           amount: parseFloat(data.amount) * (data.isExpense ? 1 : -1),
           category: data.category,
-          date: transaction.date,
+          date: transactionDate.toISOString(),
           isRecurrent: data.isRecurrent,
           recurrenceType: data.recurrenceType,
           nextDueDate: data.nextDueDate

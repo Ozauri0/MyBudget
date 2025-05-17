@@ -85,10 +85,10 @@
     </h2>
     <p class="category">{{ transaction.category }}</p>
     <p class="date-text">
-      {{ transaction.date | date:'dd/MM/yyyy HH:mm' }}
+      {{ transaction.date | date:'dd/MM/yyyy HH:mm':'UTC+0' }}
       <span *ngIf="transaction.isRecurrent" class="recurrent-info">
         <br>Recurrencia: {{ transaction.recurrenceType === 'monthly' ? 'Mensual' : 'Anual' }}
-        <br>Próximo: {{ transaction.nextDueDate | date:'dd/MM/yyyy' }}
+        <br>Próximo: {{ transaction.nextDueDate | date:'dd/MM/yyyy':'UTC+0' }}
       </span>
     </p>
   </ion-label>
