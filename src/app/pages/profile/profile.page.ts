@@ -219,13 +219,16 @@ export class ProfilePage implements OnInit {
       const confirmAlert = await this.alertCtrl.create({
         header: 'Exportar base de datos',
         message: '¿Deseas exportar todos tus datos?\nLa base de datos se guardará en el almacenamiento del dispositivo.',
+        cssClass: 'custom-alert',
         buttons: [
           {
             text: 'Cancelar',
-            role: 'cancel'
+            role: 'cancel',
+            cssClass: 'alert-button-cancel'
           },
           {
             text: 'Exportar',
+            cssClass: 'alert-button-save',
             handler: async () => {
               try {
                 // generate timestamp for file name
@@ -258,7 +261,11 @@ export class ProfilePage implements OnInit {
                 const successAlert = await this.alertCtrl.create({
                   header: 'Éxito',
                   message: `Base de datos exportada correctamente.\nPuedes encontrar el archivo en:\n${fileInfo.uri}`,
-                  buttons: ['OK']
+                  cssClass: 'custom-alert',
+                  buttons: [{
+                    text: 'OK',
+                    cssClass: 'alert-button-save'
+                  }]
                 });
                 await successAlert.present();
               } catch (error) {
@@ -266,7 +273,11 @@ export class ProfilePage implements OnInit {
                 const errorAlert = await this.alertCtrl.create({
                   header: 'Error',
                   message: 'No se pudo exportar la base de datos. Por favor, verifica los permisos de almacenamiento.',
-                  buttons: ['OK']
+                  cssClass: 'custom-alert',
+                  buttons: [{
+                    text: 'OK',
+                    cssClass: 'alert-button-cancel'
+                  }]
                 });
                 await errorAlert.present();
               }
@@ -286,13 +297,16 @@ export class ProfilePage implements OnInit {
       const confirmAlert = await this.alertCtrl.create({
         header: 'Importar base de datos',
         message: '¿Deseas importar una base de datos?\nEsto reemplazará todos los datos actuales.',
+        cssClass: 'custom-alert',
         buttons: [
           {
             text: 'Cancelar',
-            role: 'cancel'
+            role: 'cancel',
+            cssClass: 'alert-button-cancel'
           },
           {
             text: 'Seleccionar archivo',
+            cssClass: 'alert-button-save',
             handler: async () => {
               try {
                 const fileInput = document.createElement('input');
@@ -309,7 +323,11 @@ export class ProfilePage implements OnInit {
                       const errorAlert = await this.alertCtrl.create({
                         header: 'Error',
                         message: 'Por favor selecciona un archivo .db válido',
-                        buttons: ['OK']
+                        cssClass: 'custom-alert',
+                        buttons: [{
+                          text: 'OK',
+                          cssClass: 'alert-button-cancel'
+                        }]
                       });
                       await errorAlert.present();
                       return;
@@ -347,7 +365,11 @@ export class ProfilePage implements OnInit {
                       const successAlert = await this.alertCtrl.create({
                         header: 'Éxito',
                         message: 'Base de datos importada correctamente',
-                        buttons: ['OK']
+                        cssClass: 'custom-alert',
+                        buttons: [{
+                          text: 'OK',
+                          cssClass: 'alert-button-save'
+                        }]
                       });
                       await successAlert.present();
                     } catch (error) {
@@ -355,7 +377,11 @@ export class ProfilePage implements OnInit {
                       const errorAlert = await this.alertCtrl.create({
                         header: 'Error',
                         message: 'No se pudo importar la base de datos',
-                        buttons: ['OK']
+                        cssClass: 'custom-alert',
+                        buttons: [{
+                          text: 'OK',
+                          cssClass: 'alert-button-cancel'
+                        }]
                       });
                       await errorAlert.present();
                     }
@@ -368,7 +394,11 @@ export class ProfilePage implements OnInit {
                 const errorAlert = await this.alertCtrl.create({
                   header: 'Error',
                   message: 'No se pudo seleccionar el archivo',
-                  buttons: ['OK']
+                  cssClass: 'custom-alert',
+                  buttons: [{
+                    text: 'OK',
+                    cssClass: 'alert-button-cancel'
+                  }]
                 });
                 await errorAlert.present();
               }

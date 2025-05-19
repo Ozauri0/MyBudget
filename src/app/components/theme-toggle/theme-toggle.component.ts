@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { IonItem, IonLabel, IonToggle, IonSelect, IonSelectOption, IonIcon } from '@ionic/angular/standalone';
+import { IonItem, IonLabel, IonToggle, IonIcon } from '@ionic/angular/standalone';
 import { ThemeService, ThemeMode } from '../../services/theme.service';
 import { addIcons } from 'ionicons';
-import { sunnyOutline, moonOutline, contrastOutline } from 'ionicons/icons';
+import { sunnyOutline, moonOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-theme-toggle',
@@ -16,8 +16,6 @@ import { sunnyOutline, moonOutline, contrastOutline } from 'ionicons/icons';
     IonItem, 
     IonLabel, 
     IonToggle, 
-    IonSelect, 
-    IonSelectOption,
     IonIcon
   ],
   template: `
@@ -30,31 +28,20 @@ import { sunnyOutline, moonOutline, contrastOutline } from 'ionicons/icons';
         [checked]="isDarkMode">
       </ion-toggle>
     </ion-item>
-    
-    <ion-item lines="none">
-      <ion-icon slot="start" name="contrast-outline" color="primary"></ion-icon>
-      <ion-label>Tema</ion-label>
-      <ion-select 
-        [(ngModel)]="currentTheme" 
-        (ionChange)="onThemeChange($event)"
-        interface="popover"
-        align="end">
-        <ion-select-option value="system">Sistema</ion-select-option>
-        <ion-select-option value="light">Claro</ion-select-option>
-        <ion-select-option value="dark">Oscuro</ion-select-option>
-      </ion-select>
-    </ion-item>
   `,
   styles: [`
     ion-item {
       --border-radius: 10px;
-      margin-bottom: 8px;
+      --background: var(--card-bg, #252a33);
     }
     ion-icon {
       font-size: 20px;
     }
     ion-toggle {
       padding-right: 0;
+    }
+    :host-context(.override-light-mode) ion-item {
+      --background: var(--ion-color-light, #f3f5f9);
     }
   `]
 })
@@ -63,7 +50,7 @@ export class ThemeToggleComponent implements OnInit {
   isDarkMode = false;
 
   constructor(private themeService: ThemeService) {
-    addIcons({ sunnyOutline, moonOutline, contrastOutline });
+    addIcons({ sunnyOutline, moonOutline });
   }
 
   ngOnInit() {
@@ -80,9 +67,5 @@ export class ThemeToggleComponent implements OnInit {
   toggleDarkMode() {
     const newIsDark = !this.isDarkMode;
     this.themeService.setThemeMode(newIsDark ? 'dark' : 'light');
-  }
-
-  onThemeChange(event: any) {
-    this.themeService.setThemeMode(event.detail.value as ThemeMode);
   }
 }

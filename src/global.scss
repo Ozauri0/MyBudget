@@ -39,7 +39,6 @@
 /* Alert styles */
 .custom-alert {
   --backdrop-opacity: 0.6;
-  --background: var(--ion-background-color);
   
   .alert-title {
     font-size: 20px;
@@ -47,7 +46,6 @@
   }
   
   .alert-message {
-    color: white !important;
     font-size: 16px;
   }
   
@@ -80,9 +78,39 @@
   }
 }
 
-/* Versión para modo claro */
-.override-light-mode .custom-alert {
+/* Estilos específicos para modo oscuro */
+body.override-dark-mode .custom-alert,
+body:not(.override-light-mode):not(.override-dark-mode).dark-theme .custom-alert {
+  --background: var(--ion-background-color, #111827);
+  
+  .alert-title {
+    color: var(--text-color, white);
+  }
+  
   .alert-message {
-    color: var(--ion-text-color) !important;
+    color: var(--text-color, white) !important;
+  }
+}
+
+/* Estilos específicos para modo claro */
+body.override-light-mode .custom-alert,
+body:not(.override-light-mode):not(.override-dark-mode):not(.dark-theme) .custom-alert {
+  --background: var(--ion-background-color, #ffffff);
+  
+  .alert-title {
+    color: var(--text-color, #1f2937);
+  }
+  
+  .alert-message {
+    color: var(--text-color, #1f2937) !important;
+  }
+  
+  /* Asegurar que los botones mantengan su estilo */
+  .alert-button-save {
+    color: white;
+  }
+  
+  .alert-button-delete {
+    color: white;
   }
 }
