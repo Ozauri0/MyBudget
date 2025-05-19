@@ -1,134 +1,227 @@
+ion-content {
+  --background: var(--ion-background-color);
+}
+
 .details-container {
-    padding: 16px;
+  padding-bottom: 20px;
+}
+
+.details-card {
+  background-color: var(--card-bg, #252a33);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.field-group {
+  margin-bottom: 20px;
+}
+
+.field-label {
+  font-size: 14px;
+  color: var(--text-secondary, #a0a0a0);
+  margin-bottom: 8px;
+}
+
+.field-value {
+  font-size: 18px;
+  font-weight: 500;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --border-style: solid;
+  --border-width: 0 0 1px 0;
+  --border-color: var(--border-color, #3a3f47);
+  --highlight-color: var(--ion-color-primary);
+  --highlight-color-focused: var(--ion-color-primary);
+  --placeholder-color: var(--text-secondary, #a0a0a0);
+  --color: var(--text-color, white);
+  margin-bottom: 5px;
+}
+
+.button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 24px;
+}
+
+.button-primary {
+  background-color: var(--ion-color-primary, #4a6bff);
+  color: white;
+
+  &:hover {
+    background-color: var(--ion-color-primary-shade, #3a56e4);
+  }
+
+  &:disabled {
+    background-color: var(--ion-color-medium, #a0a0a0);
+    opacity: 0.7;
+  }
+}
+
+.button-secondary {
+  background-color: var(--ion-color-primary-shade, #3a56e4);
+  color: white;
+
+  &:hover {
+    background-color: var(--ion-color-primary-tint, #2a46d4);
+  }
+}
+
+.progress-container {
+  margin: 24px 0;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.progress-amount {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color, white);
+}
+
+.progress-percentage {
+  font-size: 16px;
+  color: var(--ion-color-primary, #4a6bff);
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: var(--border-color, #3a3f47);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  position: relative;
+  transition: width 0.3s ease;
+}
+
+.history-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 24px 0 16px;
+  color: var(--text-color, white);
+}
+
+.transaction-card {
+  background-color: var(--card-bg, #252a33);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-amount {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-color, white);
+}
+
+.transaction-date {
+  font-size: 14px;
+  color: var(--text-secondary, #a0a0a0);
+}
+
+.transaction-note {
+  font-size: 14px;
+  color: var(--text-secondary, #a0a0a0);
+  margin-top: 2px;
+}
+
+.delete-button {
+  color: var(--ion-color-danger, #ff3b30);
+  background: none;
+  border: none;
+  font-size: 20px; // Reducido de 24px a 20px
+  cursor: pointer;
+  padding: 4px; // Reducido de 8px a 4px
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; // Añadido ancho fijo
+  height: 32px; // Añadido altura fija
+  border-radius: 50%; // Añadido para hacer el botón circular
+}
+
+.date-container {
+  position: relative;
+}
+
+.date-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary, #a0a0a0);
+  pointer-events: none;
+  z-index: 1;
+}
+
+// Estilos para el modo oscuro
+:host-context(.override-dark-mode) {
+  .details-card {
+    background-color: var(--card-bg, #252a33);
   }
   
-  .goal-card {
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  
-    ion-item {
-      --padding-start: 0;
-      --inner-padding-end: 0;
-      --background: transparent;
-      
-      &::part(native) {
-        padding: 0;
-      }
-    }
-  
-    ion-input, ion-textarea {
-      --padding-start: 16px;
-      --padding-end: 16px;
-      margin: 8px 0;
-    }
+  .transaction-card {
+    background-color: var(--card-bg, #252a33);
+  }
+}
+
+// Estilos para el modo claro
+:host-context(.override-light-mode) {
+  .details-card {
+    background-color: var(--ion-color-light, #f3f5f9);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
   }
   
-  .progress-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: var(--ion-color-medium);
+  .transaction-card {
+    background-color: var(--ion-color-light, #f3f5f9);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  }
+  
+  .field-value {
+    --border-color: var(--border-color, #e5e7eb);
+    --color: var(--text-color, #1f2937);
+  }
+  
+  .field-label, .transaction-date, .transaction-note {
+    color: var(--text-secondary, #6b7280);
+  }
+  
+  .transaction-amount, .history-title, .progress-amount {
+    color: var(--text-color, #1f2937);
   }
   
   .progress-bar {
-    width: 100%;
-    height: 8px;
-    background-color: var(--ion-color-light);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 16px;
+    background-color: var(--ion-color-light-shade, #d1d5db);
   }
-  
-  .progress-fill {
-    height: 100%;
-    transition: width 0.3s ease;
-  }
-  
-  .transactions-section {
-    margin-top: 24px;
-  
-    h2 {
-      margin-bottom: 16px;
-      font-size: 20px;
-      font-weight: 500;
-      padding: 0 8px;
-    }
-  }
-  
-  .transaction-item {
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --padding-top: 12px;
-    --padding-bottom: 12px;
-    margin-bottom: 8px;
-    border-radius: 12px;
-    --background: var(--ion-color-light);
-    cursor: pointer;
-  
-    h2 {
-      font-weight: 500;
-      margin: 0 0 4px;
-    }
-  
-    p {
-      margin: 0;
-      font-size: 14px;
-      color: var(--ion-color-medium);
-    }
-  
-    ion-button {
-      margin: 0;
-    }
-  }
-  
-  ion-textarea {
-    min-height: 100px;
-  }
-  
-  // Animaciones y efectos hover
-  .goal-card, .transaction-item {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  
-    &:active {
-      transform: scale(0.98);
-    }
-  }
-  
-  .transaction-item:hover {
-    --background: var(--ion-color-light-shade);
-  }
-  
-  // Estilos para el modo oscuro
-  :host-context(.dark-theme) {
-    .goal-card {
-      background: var(--ion-card-background);
-    }
-  
-    .transaction-item {
-      --background: var(--ion-card-background);
-  
-      &:hover {
-        --background: var(--ion-color-step-100);
-      }
-    }
-  }
-  .save-fields-button {
-    margin-top: 16px;
-    margin-bottom: 8px;
-  }
-  :host {
-    ion-alert.error-alert {
-      --background: #fff7f7;
-      
-      .alert-sub-title {
-        color: var(--ion-color-danger);
-        font-weight: 500;
-      }
-      
-      .alert-message {
-        color: var(--ion-color-danger);
-      }
-    }
-  }
+}

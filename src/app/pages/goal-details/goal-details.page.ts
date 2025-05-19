@@ -109,6 +109,7 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
   async editTransaction(transaction: GoalTransaction) {
     const alert = await this.alertCtrl.create({
       header: 'Editar Transacción',
+      cssClass: 'custom-alert',
       inputs: [
         {
           name: 'amount',
@@ -126,10 +127,12 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Guardar',
+          cssClass: 'alert-button-save',
           handler: async (data) => {
             if (data.amount && this.goal) {
               try {
@@ -157,14 +160,17 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
     const alert = await this.alertCtrl.create({
       header: '¿Eliminar transacción?',
       message: '¿Estás seguro de que deseas eliminar esta transacción?',
+      cssClass: 'custom-alert',
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Eliminar',
           role: 'destructive',
+          cssClass: 'alert-button-delete',
           handler: async () => {
             if (this.goal && transaction.id) {
               try {
@@ -190,6 +196,7 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
     const alert = await this.alertCtrl.create({
       header: 'Agregar Progreso',
       message: this.showValidationError ? 'Por favor, ingrese una cantidad válida.' : '',
+      cssClass: 'custom-alert',
       inputs: [
       {
         name: 'amount',
@@ -205,10 +212,12 @@ export class GoalDetailsPage implements OnInit, OnDestroy {
       buttons: [
       {
         text: 'Cancelar',
-        role: 'cancel'
+        role: 'cancel',
+        cssClass: 'alert-button-cancel'
       },
       {
         text: 'Agregar',
+        cssClass: 'alert-button-save',
         handler: async (data) => {
         const amount = parseFloat(data.amount);
         
