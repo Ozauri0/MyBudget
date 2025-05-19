@@ -1,6 +1,6 @@
 ion-header {
     ion-toolbar {
-      --background: #ffffff;
+      --background: var(--ion-toolbar-background);
       --border-width: 0;
       --padding-top: 10px;
       --padding-bottom: 10px;
@@ -9,13 +9,13 @@ ion-header {
     ion-title {
       font-size: 18px;
       font-weight: 600;
-      color: #333333;
+      color: var(--ion-text-color);
     }
   
     ion-button {
       --padding-start: 8px;
       --padding-end: 8px;
-      --color: #333333;
+      --color: var(--ion-text-color);
     }
   
     ion-icon {

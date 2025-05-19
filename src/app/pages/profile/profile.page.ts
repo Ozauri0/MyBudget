@@ -19,6 +19,7 @@ import {
   IonText
 } from '@ionic/angular/standalone';
 import { HeaderComponent } from 'src/app/components/header/header.component';
+import { ThemeToggleComponent } from 'src/app/components/theme-toggle/theme-toggle.component';
 import { DatabaseService } from '../../services/database.service';
 import { User } from '../../models/user.model';
 import { addIcons } from 'ionicons';
@@ -44,6 +45,7 @@ interface GradientBackground {
     CommonModule,
     FormsModule,
     HeaderComponent,
+    ThemeToggleComponent,
     IonContent,
     IonItem,
     IonLabel,
@@ -226,19 +228,19 @@ export class ProfilePage implements OnInit {
             text: 'Exportar',
             handler: async () => {
               try {
-                // Generar nombre del archivo con timestamp
+                // generate timestamp for file name
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
                 const fileName = `mybudget_backup_${timestamp}.db`;
                 
-                // Obtener datos de la base de datos como string base64
+                // get data string base64
                 const dbData: string = await this.database.exportDatabase();
                 
-                // Si no retorna una cadena, mostrar error
+                // if dbData is empty, show error
                 if (!dbData) {
                   throw new Error("No se pudieron exportar los datos de la base de datos");
                 }
                 
-                // Guardar el archivo usando Filesystem
+                // save the file to the device
                 const result = await Filesystem.writeFile({
                   path: `Download/${fileName}`,
                   data: dbData, 
@@ -246,7 +248,8 @@ export class ProfilePage implements OnInit {
                   recursive: true
                 });
                 
-                // Obtener la ruta URI para mostrar al usuario
+                // get the file URI
+                // Note: The file URI is not needed for the export, but you can use it to show the user where the file is saved
                 const fileInfo = await Filesystem.getUri({
                   path: `Download/${fileName}`,
                   directory: Directory.ExternalStorage
@@ -313,29 +316,29 @@ export class ProfilePage implements OnInit {
                     }
     
                     try {
-                      // Leer el archivo como ArrayBuffer
+                      // reading the file as ArrayBuffer
                       const arrayBuffer = await file.arrayBuffer();
                       const base64Data = this.arrayBufferToBase64(arrayBuffer);
                       
-                      // Guardar temporalmente en caché
+                      // save the file to the device
                       const tempFileName = `temp_import_${new Date().getTime()}.db`;
                       await Filesystem.writeFile({
                         path: tempFileName,
-                        data: base64Data, // base64Data es una cadena, por lo que es compatible
+                        data: base64Data, // base64Data is the content of the file
                         directory: Directory.Cache
                       });
                       
-                      // Obtener URI del archivo temporal
+                      // get the file URI
                       const fileInfo = await Filesystem.getUri({
                         path: tempFileName,
                         directory: Directory.Cache
                       });
                       
-                      // Importar la base de datos con la misma lógica actual
+                      // Import the database
                       await this.database.importDatabase(fileInfo.uri);
                       await this.loadUserData();
                       
-                      // Eliminar archivo temporal
+                      // delete the temporary file
                       await Filesystem.deleteFile({
                         path: tempFileName,
                         directory: Directory.Cache
@@ -379,7 +382,8 @@ export class ProfilePage implements OnInit {
     }
   }
   
-  // Método auxiliar para convertir ArrayBuffer a Base64
+  // auxiliary function to convert ArrayBuffer to base64
+  // this is needed because the Filesystem API requires base64 data
   private arrayBufferToBase64(buffer: ArrayBuffer): string {
     let binary = '';
     const bytes = new Uint8Array(buffer);

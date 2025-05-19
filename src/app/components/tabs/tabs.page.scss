@@ -1,12 +1,12 @@
 ion-tab-bar {
-    --background: #ffffff;
+    --background: var(--ion-toolbar-background);
     border-radius: 8px 8px 0 0;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ion-tab-bar-shadow, 0 -4px 12px rgba(0, 0, 0, 0.05));
   }
   
   ion-tab-button {
-    --color: #8c8c8c;
-    --color-selected: #3880ff;
+    --color: var(--ion-color-medium);
+    --color-selected: var(--ion-color-primary);
   
     &::before {
       display: none;
@@ -20,4 +20,15 @@ ion-tab-bar {
   ion-label {
     font-size: 12px;
     font-weight: 500;
+  }
+  
+  // adjust the tab bar shadow for dark mode
+  .override-dark-mode ion-tab-bar {
+    --ion-tab-bar-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    body:not(.override-light-mode) ion-tab-bar {
+      --ion-tab-bar-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+    }
   }

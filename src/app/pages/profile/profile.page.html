@@ -2,7 +2,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="profile-container" *ngIf="userData">
-    <!-- Avatar con iniciales -->
+    <!-- Avatar with initials -->
     <div class="profile-avatar" [style.background]="gradients[selectedGradient - 1].gradient">
       <span class="initials">{{userInitials}}</span>
       <ion-button fill="clear" 
@@ -12,9 +12,9 @@
       </ion-button>
     </div>
 
-    <!-- Formulario de perfil -->
+    <!-- profile form -->
     <ion-list class="profile-form">
-      <!-- Nombre -->
+      <!-- Name -->
       <div class="field-container">
         <div class="field-label">Nombre</div>
         <ion-item lines="none">
@@ -27,7 +27,7 @@
         </ion-item>
       </div>
 
-      <!-- Moneda -->
+      <!-- Currency -->
       <div class="field-container">
         <div class="field-label">Moneda</div>
         <ion-item lines="none">
@@ -50,7 +50,13 @@
       </div>
     </ion-list>
 
-    <!-- Botones de acción -->
+    <!-- theme settings -->
+    <div class="section-title">Apariencia</div>
+    <ion-list class="theme-settings">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-list>
+
+    <!-- action buttons -->
     <div class="action-buttons">
       <ion-button *ngIf="!isEditing" 
                   expand="block"
