@@ -1,5 +1,5 @@
 ion-content {
-  --background: var(--ion-color-light);
+  --background: var(--ion-background-color);
 }
 
 .stats-container {
@@ -10,21 +10,21 @@ ion-content {
 }
 
 .stat-card {
-  background: var(--ion-color-white);
+  background: var(--ion-color-light, #f3f5f9);
   border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   
   .stat-label {
-    color: var(--ion-color-medium);
+    color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 4px;
   }
   
   .stat-value {
-    color: var(--ion-color-dark);
+    color: var(--text-color);
     font-size: 18px;
     font-weight: 600;
   }
@@ -38,14 +38,14 @@ ion-content {
   padding: 0 4px;
   
   .toggle-label {
-    color: var(--ion-color-medium);
+    color: var(--text-secondary);
     font-size: 14px;
   }
   
   ion-toggle {
     --handle-background: var(--ion-color-medium);
     --handle-background-checked: var(--ion-color-medium);
-    --background: var(--ion-color-light-medium);
+    --background: var(--ion-color-light);
     --background-checked: var(--ion-color-primary);
     z-index: 1;
   }
@@ -59,11 +59,14 @@ ion-content {
 
 .goal-card {
   margin: 0;
-  background: var(--ion-color-white);
+  background: var(--ion-color-light, #f3f5f9);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   
+  &.completed {
+    border-left: 4px solid var(--ion-color-success);
+  }
   
   .card-content {
     padding: 16px;
@@ -92,7 +95,7 @@ ion-content {
     
     ion-card-title {
       flex: 1;
-      color: var(--ion-color-dark);
+      color: var(--text-color);
       font-size: 16px;
       margin: 0;
     }
@@ -104,20 +107,20 @@ ion-content {
     margin-bottom: 12px;
     
     .current-amount {
-      color: var(--ion-color-dark);
+      color: var(--text-color);
       font-size: 20px;
       font-weight: 600;
     }
     
     .target-amount {
-      color: var(--ion-color-medium);
+      color: var(--text-secondary);
       font-size: 14px;
     }
   }
   
   .progress-bar {
     height: 6px;
-    background: var(--ion-color-light-shade);
+    background: var(--ion-color-light);
     border-radius: 3px;
     overflow: hidden;
     margin-bottom: 8px;
@@ -135,7 +138,7 @@ ion-content {
   
   .progress-percentage {
     text-align: right;
-    color: var(--ion-color-medium);
+    color: var(--text-secondary);
     font-size: 14px;
   }
 }
@@ -154,4 +157,16 @@ ion-content {
   --background-activated: var(--ion-color-primary-shade);
   margin-bottom: 16px;
   margin-right: 16px;
+}
+
+// styles for dark mode
+// Override dark mode styles for stat cards and goal cards
+:host-context(.override-dark-mode) {
+  .stat-card {
+    background: var(--card-bg, #1f2937);
+  }
+  
+  .goal-card {
+    background: var(--card-bg, #1f2937);
+  }
 }
