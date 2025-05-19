@@ -26,8 +26,8 @@ import { Transaction } from '../../models/transaction.model';
 import { NgxEchartsModule } from 'ngx-echarts';
 import type { EChartsOption } from 'echarts';
 import { EventsService } from '../../services/events.service';
-import { Subscription, merge } from 'rxjs';
-import { h } from 'ionicons/dist/types/stencil-public-runtime';
+import { Subscription } from 'rxjs';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-accounts',
@@ -81,39 +81,74 @@ export class AccountsPage implements OnInit, OnDestroy {
     '#f9917b', '#a5d16f', '#8378ea', '#e06343', '#44c0c1'
   ];
 
+  // variable to store the current theme mode
+  // (dark or light)
+  isDarkMode: boolean = false;
+
   constructor(
     private database: DatabaseService,
     private events: EventsService,
     private cdr: ChangeDetectorRef,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private themeService: ThemeService 
   ) {}
 
   ionViewWillEnter() {
+    this.checkDarkMode(); // update dark mode on view enter
     this.loadTransactions();
   }
 
   ngOnInit() {
     this.initializeSubscriptions();
+    this.checkDarkMode();
     this.loadTransactions();
   }
 
   private initializeSubscriptions() {
-    // Add your subscription initialization logic here
+    // suscription to listen for changes in transactions
+    const themeSub = this.themeService.themeMode$.subscribe(() => {
+      this.checkDarkMode();
+      this.updateAllCharts();
+    });
+    
+    this.subscriptions.add(themeSub);
   }
 
-  // Nueva función para manejar el cambio de mes
+  // use this function to check the current theme mode
+  // and update the isDarkMode variable
+  private checkDarkMode() {
+    this.isDarkMode = this.themeService.isDarkMode();
+    console.log('Tema detectado (desde ThemeService):', this.isDarkMode ? 'oscuro' : 'claro');
+  }
+
+  // get the text color based on the current theme
+  private getTextColor(): string {
+    return this.isDarkMode ? '#ffffff' : '#333333';
+  }
+
+  // get the tooltip background color based on the current theme
+  private getTooltipBackgroundColor(): string {
+    return this.isDarkMode ? '#1e1e1e' : '#ffffff';
+  }
+
+  // get the tooltip border color based on the current theme
+  private getTooltipBorderColor(): string {
+    return this.isDarkMode ? '#3a3a3a' : '#e0e0e0';
+  }
+
+  // new function to handle the month change
   onMonthChange(event: any) {
     this.selectedMonth = event.detail.value;
     this.preparePieChartData();
     this.cdr.detectChanges();
   }
 
-  // Obtener meses disponibles de las transacciones
+  // get the available months from the transactions
   private getAvailableMonths() {
     const monthsSet = new Set<string>();
     
     this.transactions.forEach(t => {
-      if (t.amount > 0) { // Solo para gastos
+      if (t.amount > 0) { // only consider positive transactions
         const date = new Date(t.date);
         const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
         monthsSet.add(monthYear);
@@ -126,7 +161,8 @@ export class AccountsPage implements OnInit, OnDestroy {
       return yearA !== yearB ? yearA - yearB : monthA - monthB;
     });
     
-    // Seleccionar el mes actual por defecto
+    // select the last month available
+    // if no month is selected or the selected month is not available
     if (!this.selectedMonth || !this.availableMonths.includes(this.selectedMonth)) {
       const now = new Date();
       const currentMonth = `${now.getMonth() + 1}/${now.getFullYear()}`;
@@ -134,25 +170,26 @@ export class AccountsPage implements OnInit, OnDestroy {
       if (this.availableMonths.includes(currentMonth)) {
         this.selectedMonth = currentMonth;
       } else if (this.availableMonths.length > 0) {
-        // Si no hay datos para el mes actual, seleccionar el último mes disponible
+        // if the current month is not available, select the last available month
         this.selectedMonth = this.availableMonths[this.availableMonths.length - 1];
       }
     }
   }
   
-  // Función para obtener el nombre del mes para mostrar
+  // function to get the month name from the month string
+  // format: "MM/YYYY"
   getMonthName(monthString: string): string {
     const [month, year] = monthString.split('/').map(Number);
     const date = new Date(year, month - 1, 1);
-    
-    // Formato: "Junio 2023"
+  
+    // Use toLocaleString to get the month name in Spanish
     return date.toLocaleString('es', { month: 'long', year: 'numeric' });
   }
 
   private async loadTransactions() {
     try {
       this.transactions = await this.database.getTransactions();
-      this.getAvailableMonths(); // Obtener meses disponibles
+      this.getAvailableMonths(); // get available months after loading transactions
       this.updateAllCharts();
       this.cdr.detectChanges();
     } catch (error) {
@@ -160,7 +197,8 @@ export class AccountsPage implements OnInit, OnDestroy {
     }
   }
 
-  // Modificar preparePieChartData para filtrar por mes seleccionado
+  // update all charts
+  // this function is called when the month is changed
   private updateAllCharts() {
     this.preparePieChartData();
     this.prepareLineChartData();
@@ -172,8 +210,8 @@ export class AccountsPage implements OnInit, OnDestroy {
     
     if (!this.selectedMonth) return;
     
-    // Primero, recopilamos todas las categorías de todas las transacciones
-    // para asignar colores consistentes
+    // first, we need to filter the transactions by month
+    // and then we will assign colors to the categories
     this.transactions.forEach(t => {
       if (t.amount > 0 && !this.categoryColors.has(t.category)) {
         const colorIndex = this.categoryColors.size % this.colorPalette.length;
@@ -181,7 +219,8 @@ export class AccountsPage implements OnInit, OnDestroy {
       }
     });
     
-    // Luego, filtramos por el mes seleccionado para los datos del gráfico
+    // then we will filter the transactions by month
+    // and sum the amounts for each category
     this.transactions.forEach(t => {
       if (t.amount > 0) {
         const date = new Date(t.date);
@@ -193,6 +232,12 @@ export class AccountsPage implements OnInit, OnDestroy {
         }
       }
     });
+  
+    // get the total amount for the selected month
+    const textColor = this.getTextColor();
+    const borderColor = this.isDarkMode ? 'rgba(0, 0, 0, 0.3)' : '#fff';
+    const tooltipBackgroundColor = this.getTooltipBackgroundColor();
+    const tooltipBorderColor = this.getTooltipBorderColor();
   
     this.pieChartOption = {
       animation: true,
@@ -219,7 +264,12 @@ export class AccountsPage implements OnInit, OnDestroy {
   
           return [x, y];
         },
-        confine: true
+        confine: true,
+        backgroundColor: tooltipBackgroundColor,
+        borderColor: tooltipBorderColor,
+        textStyle: {
+          color: textColor
+        }
       },
       legend: {
         orient: 'horizontal',
@@ -229,10 +279,11 @@ export class AccountsPage implements OnInit, OnDestroy {
         textStyle: {
           fontSize: 12,
           overflow: 'truncate',
-          width: 100
+          width: 100,
+          color: textColor
         },
         pageTextStyle: {
-          color: '#888'
+          color: textColor
         },
         formatter: (name: string) => {
           const value = categoryData.get(name) || 0;
@@ -251,15 +302,17 @@ export class AccountsPage implements OnInit, OnDestroy {
         avoidLabelOverlap: true,
         itemStyle: {
           borderRadius: 10,
-          borderColor: '#fff',
-          borderWidth: 2
+          borderColor: borderColor,
+          borderWidth: 1
         },
         label: {
-          show: false
+          show: false,
+          color: textColor
         },
         emphasis: {
           label: {
-            show: false
+            show: false,
+            color: textColor
           }
         },
         labelLine: {
@@ -305,6 +358,11 @@ export class AccountsPage implements OnInit, OnDestroy {
       return yearA !== yearB ? yearA - yearB : monthA - monthB;
     });
 
+    // get the total amount for the selected month
+    const textColor = this.getTextColor();
+    const tooltipBackgroundColor = this.getTooltipBackgroundColor();
+    const tooltipBorderColor = this.getTooltipBorderColor();
+
     this.lineChartOption = {
       animation: true,
       tooltip: {
@@ -321,11 +379,19 @@ export class AccountsPage implements OnInit, OnDestroy {
             result += `${param.seriesName}: ${this.currencyService.formatAmount(param.value)}<br/>`;
           });
           return result;
+        },
+        backgroundColor: tooltipBackgroundColor,
+        borderColor: tooltipBorderColor,
+        textStyle: {
+          color: textColor
         }
       },
       legend: {
         data: ['Ingresos', 'Gastos'],
-        bottom: '10'
+        bottom: '10',
+        textStyle: {
+          color: textColor
+        }
       },
       grid: {
         left: '3%',
@@ -336,12 +402,26 @@ export class AccountsPage implements OnInit, OnDestroy {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: sortedMonths
+        data: sortedMonths,
+        axisLabel: {
+          color: textColor
+        },
+        axisLine: {
+          lineStyle: {
+            color: this.isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'
+          }
+        }
       },
       yAxis: {
         type: 'value',
         axisLabel: {
-          formatter: (value: number) => this.currencyService.formatAmount(value)
+          formatter: (value: number) => this.currencyService.formatAmount(value),
+          color: textColor
+        },
+        splitLine: {
+          lineStyle: {
+            color: this.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+          }
         }
       },
       series: [
@@ -396,6 +476,11 @@ export class AccountsPage implements OnInit, OnDestroy {
       }
     });
 
+    // get the total amount for the selected month
+    const textColor = this.getTextColor();
+    const tooltipBackgroundColor = this.getTooltipBackgroundColor();
+    const tooltipBorderColor = this.getTooltipBorderColor();
+
     this.barChartOption = {
       animation: true,
       tooltip: {
@@ -407,6 +492,11 @@ export class AccountsPage implements OnInit, OnDestroy {
           const value = params[0].value;
           const sign = value >= 0 ? '+' : '';
           return `${params[0].name}: ${sign}${this.currencyService.formatAmount(Math.abs(value))}`;
+        },
+        backgroundColor: tooltipBackgroundColor,
+        borderColor: tooltipBorderColor,
+        textStyle: {
+          color: textColor
         }
       },
       grid: {
@@ -420,13 +510,25 @@ export class AccountsPage implements OnInit, OnDestroy {
         data: last6Months,
         axisLabel: {
           interval: 0,
-          rotate: 30
+          rotate: 30,
+          color: textColor
+        },
+        axisLine: {
+          lineStyle: {
+            color: this.isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'
+          }
         }
       },
       yAxis: {
         type: 'value',
         axisLabel: {
-          formatter: (value: number) => this.currencyService.formatAmount(value)
+          formatter: (value: number) => this.currencyService.formatAmount(value),
+          color: textColor
+        },
+        splitLine: {
+          lineStyle: {
+            color: this.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+          }
         }
       },
       series: [{

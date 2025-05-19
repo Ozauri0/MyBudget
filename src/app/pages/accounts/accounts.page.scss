@@ -7,8 +7,8 @@
     .chart-card {
       margin: 0;
       border-radius: 16px;
-      background: var(--ion-color-light);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: var(--ion-color-light, #f3f5f9);
+      box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
   
       ion-card-header {
         padding: 20px 20px 0;
@@ -16,13 +16,13 @@
         ion-card-title {
           font-size: 18px;
           font-weight: 600;
-          color: var(--ion-color-dark);
+          color: var(--text-color, #1f2937);
           margin-bottom: 4px;
         }
   
         ion-card-subtitle {
           font-size: 14px;
-          color: var(--ion-color-medium);
+          color: var(--text-secondary, #6b7280);
         }
       }
   
@@ -33,7 +33,7 @@
   
     .chart {
       width: 100%;
-      background: var(--ion-color-light);
+      background: transparent;
       border-radius: 12px;
   
       &.pie-chart {
@@ -89,5 +89,25 @@
         opacity: 1;
         color: var(--ion-color-primary);
       }
+    }
+  }
+
+  // Darkmode Styles
+  :host-context(.override-dark-mode) {
+    .chart-card {
+      background: var(--card-bg, #1f2937);
+      box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.2));
+
+      ion-card-title {
+        color: var(--text-color, #f9fafb);
+      }
+
+      ion-card-subtitle {
+        color: var(--text-secondary, #d1d5db);
+      }
+    }
+
+    .no-data {
+      color: var(--text-secondary, #d1d5db);
     }
   }
