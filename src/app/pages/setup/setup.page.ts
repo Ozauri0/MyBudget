@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { EventsService } from '../../services/events.service';
 import { CurrencyService, CurrencyConfig } from '../../services/currency.service';
+import { ThemeService } from '../../services/theme.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-setup',
@@ -14,24 +16,54 @@ import { CurrencyService, CurrencyConfig } from '../../services/currency.service
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class SetupPage implements OnInit {
+export class SetupPage implements OnInit, OnDestroy {
   userName: string = '';
   userLastName: string = '';
   baseSalary: number = 0;
   currencies: CurrencyConfig[] = [];
   selectedCurrency: CurrencyConfig = {} as CurrencyConfig;
   isEditing: boolean = true; // Siempre verdadero en setup para poder editar la moneda
+  isDarkMode: boolean = false;
+  private themeSubscription: Subscription | undefined;
 
   constructor(
     private userService: UserService,
     private router: Router,
     private events: EventsService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit() {
     this.checkExistingUser();
     this.loadCurrencies();
+    this.setupTheme();
+  }
+
+  ngOnDestroy() {
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
+    }
+  }
+
+  // Método para obtener las opciones de interfaz del selector según el tema
+  getSelectInterfaceOptions() {
+    const isDark = this.isDarkMode;
+    return {
+      header: 'Seleccionar Moneda',
+      cssClass: isDark ? 'select-action-sheet-dark' : 'select-action-sheet-light',
+      backdropDismiss: true,
+    };
+  }
+
+  setupTheme() {
+    // Obtener el estado inicial del tema
+    this.isDarkMode = this.themeService.isDarkMode();
+    
+    // Suscribirse a cambios de tema
+    this.themeSubscription = this.themeService.themeMode$.subscribe(() => {
+      this.isDarkMode = this.themeService.isDarkMode();
+    });
   }
 
   loadCurrencies() {

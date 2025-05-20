@@ -1,54 +1,80 @@
 <!-- setup.page.html -->
-<ion-content class="ion-padding setup-content">
-  <div class="form-container">
-    <h1>¡Bienvenido!</h1>
+<ion-content class="ion-padding setup-content" [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
+  <div class="registration-card">
+    <div class="logo-container">
+      <div class="logo">
+        <span class="logo-icon">💰</span>
+      </div>
+      <h1 class="welcome-text">¡Bienvenid&#64;!</h1>
+      <p class="subtitle">Comienza a organizar tus finanzas</p>
+    </div>
+
     <form (ngSubmit)="onSubmit()">
-      <ion-item>
+      <div class="form-group">
+        <label class="form-label" for="nombre">¿Cuál es tu nombre?</label>
         <ion-input 
           type="text"
+          id="nombre"
+          class="form-input custom-input themed-input themed-input-fix"
           [(ngModel)]="userName" 
           name="userName" 
           required
-          label="¿Cuál es tu nombre?"
-          labelPlacement="floating"
-          placeholder="Escribe tu nombre"
+          placeholder="Ingresa tu nombre"
           [clearInput]="true"
           autocapitalize="words">
         </ion-input>
-      </ion-item>
+      </div>
 
-      <ion-item>
+      <div class="form-group">
+        <label class="form-label" for="apellido">¿Cuál es tu apellido?</label>
         <ion-input 
           type="text"
+          id="apellido"
+          class="form-input custom-input themed-input themed-input-fix"
           [(ngModel)]="userLastName" 
           name="userLastName" 
           required
-          label="¿Cuál es tu apellido?"
-          labelPlacement="floating"
-          placeholder="Escribe tu apellido"
+          placeholder="Ingresa tu apellido"
           [clearInput]="true"
           autocapitalize="words">
         </ion-input>
-      </ion-item>
+      </div>
 
-      <ion-item class="currency-item">
-        <ion-label position="floating">¿Cuál es tu moneda?</ion-label>
-        <ion-select
-          [(ngModel)]="selectedCurrency"
-          name="currency"
-          (ionChange)="onCurrencyChange($event.detail.value)"
-          interface="action-sheet"
-          [interfaceOptions]="{ header: 'Seleccionar Moneda' }"
-          placeholder="Selecciona tu moneda">
-          <ion-select-option *ngFor="let currency of currencies" [value]="currency">
-            {{currency.symbol}} - {{currency.name}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="form-group">
+        <label class="form-label" for="moneda">¿Cuál es tu moneda?</label>
+        <div class="dropdown-container">
+          <ion-select
+            id="moneda"
+            class="currency-select custom-select themed-input themed-input-fix"
+            [(ngModel)]="selectedCurrency"
+            name="currency"
+            (ionChange)="onCurrencyChange($event.detail.value)"
+            interface="action-sheet"
+            [interfaceOptions]="getSelectInterfaceOptions()"
+            placeholder="Selecciona tu moneda"
+            [style.--background]="isDarkMode ? 'var(--input-bg-dark)' : 'var(--input-bg-light)'"
+            [style.--color]="isDarkMode ? '#f9fafb' : '#1f2937'"
+            [style.border-color]="isDarkMode ? 'var(--input-border-dark)' : 'var(--input-border-light)'">
+            <ion-select-option *ngFor="let currency of currencies" [value]="currency">
+              {{currency.symbol}} - {{currency.name}}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </div>
 
-      <ion-button expand="block" type="submit" [disabled]="!userName || !userLastName || !selectedCurrency.symbol">
+      <button type="submit" class="button button-primary" [disabled]="!userName || !userLastName || !selectedCurrency.symbol">
         Comenzar
-      </ion-button>
+      </button>
     </form>
+
+    <div class="terms">
+      Al continuar, aceptas nuestra <a href="https://mybudget.christianferrer.me/privacy-policy" target="_blank">Política de privacidad</a>
+    </div>
+
+    <div class="steps-indicator">
+      <div class="step active"></div>
+      <div class="step"></div>
+      <div class="step"></div>
+    </div>
   </div>
 </ion-content>

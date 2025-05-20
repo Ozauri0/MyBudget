@@ -1,20 +1,154 @@
+/* Variables para modo claro y oscuro */
+:host {
+  --placeholder-color-light: rgba(107, 114, 128, 0.8); /* Gris claro semitransparente */
+  --placeholder-color-dark: rgba(255, 255, 255, 0.8); /* Blanco semitransparente */
+  --input-bg-light: #ffffff;
+  --input-bg-dark: #1f2937;
+  --input-border-light: #d1d5db;
+  --input-border-dark: #4b5563;
+  --card-bg-grey: #252a33;
+}
+
 .setup-content {
-  --background: var(--ion-color-light);
+  --background: var(--ion-background-color);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  padding: 20px;
 }
 
-.form-container {
-  background-color: white;
+/* Estilos para el contenedor base por atributo data-theme */
+.setup-content[data-theme="light"] {
+  background-color: var(--ion-background-color, #ffffff);
+  color: var(--ion-text-color, #1f2937);
+
+  .registration-card {
+    background-color: var(--card-bg, #ffffff);
+    color: var(--text-color, #1f2937);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  }
+
+  .welcome-text {
+    color: var(--text-color, #1f2937);
+  }
+
+  .subtitle {
+    color: var(--text-secondary, #6b7280);
+  }
+
+  .form-label {
+    color: var(--text-color, #1f2937);
+  }
+  
+  ion-input, input, ion-select, select {
+    --background: var(--input-bg-light) !important;
+    --color: var(--text-color, #1f2937) !important;
+    --placeholder-color: var(--placeholder-color-light) !important;
+    border: 1px solid var(--input-border-light) !important;
+    background-color: var(--input-bg-light) !important;
+  }
+  
+  ion-input::part(native),
+  ion-select::part(native),
+  ion-input .native-input,
+  ion-select .native-select {
+    background-color: var(--input-bg-light) !important;
+    color: var(--text-color, #1f2937) !important;
+  }
+
+  .terms {
+    color: var(--text-secondary, #6b7280);
+  }
+
+  .step {
+    background-color: rgba(107, 114, 128, 0.3);
+    
+    &.active {
+      background-color: var(--ion-color-primary);
+    }
+  }
+}
+
+/* Estilos para el contenedor en modo oscuro por atributo data-theme */
+.setup-content[data-theme="dark"] {
+  background-color: var(--ion-background-color, #111827);
+  color: var(--ion-text-color, #f9fafb);
+
+  .registration-card {
+    background-color: var(--card-bg, #1f2937);
+    color: var(--text-color, #f9fafb);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.2));
+  }
+
+  .welcome-text {
+    color: var(--text-color, #f9fafb);
+  }
+
+  .subtitle {
+    color: var(--text-secondary, #d1d5db);
+  }
+  
+  .form-label {
+    color: var(--text-color, #f9fafb);
+  }
+  
+  ion-input, input, ion-select, select {
+    --background: var(--input-bg-dark) !important;
+    --color: var(--text-color, #f9fafb) !important;
+    --placeholder-color: var(--placeholder-color-dark) !important;
+    border: 1px solid var(--input-border-dark) !important;
+    background-color: var(--input-bg-dark) !important;
+  }
+  
+  ion-input::part(native),
+  ion-select::part(native),
+  ion-input .native-input,
+  ion-select .native-select {
+    background-color: var(--input-bg-dark) !important;
+    color: var(--text-color, #f9fafb) !important;
+  }
+
+  .ion-select::part(icon) {
+    color: var(--text-color, #f9fafb) !important;
+  }
+  
+  .terms {
+    color: var(--text-secondary, #d1d5db);
+    
+    a {
+      color: var(--ion-color-primary-tint);
+    }
+  }
+  
+  .step {
+    background-color: rgba(255, 255, 255, 0.2);
+    
+    &.active {
+      background-color: var(--ion-color-primary);
+    }
+  }
+  
+  /* Aplicando estilos a elementos nativos */
+  ion-input input,
+  ion-input textarea,
+  ion-input .native-input,
+  ion-input .input-native,
+  ion-input .input-wrapper,
+  ion-select .select-native,
+  ion-select select {
+    background-color: var(--input-bg-dark) !important;
+    color: var(--text-color, #f9fafb) !important;
+  }
+}
+
+/* El resto de estilos comunes para ambos temas */
+.registration-card {
   border-radius: 24px;
-  padding: 32px 24px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  margin: auto;
+  padding: 32px 24px;
+  box-shadow: var(--shadow-md);
   animation: slideUp 0.5s ease-out;
 
   @keyframes slideUp {
@@ -29,127 +163,311 @@
   }
 }
 
-h1 {
-  color: var(--ion-color-dark);
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 32px;
+// Resto de estilos comunes
+.logo-container {
   text-align: center;
-  letter-spacing: -0.5px;
+  margin-bottom: 32px;
 }
 
-ion-item {
-  --background: transparent;
-  --border-color: transparent;
-  --border-radius: 12px;
-  --padding-start: 0;
-  --inner-padding-end: 0;
+.logo {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(45deg, var(--ion-color-primary), var(--ion-color-primary-tint));
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(58, 86, 228, 0.3);
+}
+
+.logo-icon {
+  font-size: 40px;
+  color: white;
+}
+
+.welcome-text {
+  color: var(--text-color, #1f2937); /* Cambiado para usar la variable de tema general */
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text-secondary, #6b7280); /* Cambiado para usar la variable de tema general */
+  font-size: 16px;
+  margin-bottom: 32px;
+}
+
+.form-group {
   margin-bottom: 20px;
-  --highlight-height: 0;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  &::part(native) {
-    padding: 0;
-  }
 }
 
-ion-input {
-  --background: var(--ion-color-light);
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 16px;
-  --padding-bottom: 16px;
-  --border-radius: 12px;
-  --color: var(--ion-color-dark);
-  --placeholder-color: var(--ion-color-medium);
-  font-size: 1rem;
-  
-}
-
-ion-label {
-  color: var(--ion-color-medium);
-  font-size: 0.9rem;
+.form-label {
+  display: block;
+  color: var(--text-color, #1f2937); /* Cambiado para usar la variable de tema general */
+  font-size: 14px;
   font-weight: 500;
   margin-bottom: 8px;
 }
 
-ion-button {
-  --background: var(--ion-color-primary);
-  --background-hover: var(--ion-color-primary-shade);
-  --color: white;
-  --border-radius: 12px;
-  margin-top: 32px;
-  height: 52px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  --box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
-  
-  &::part(native) {
-    padding: 16px;
-  }
-
-  &:hover {
-    --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.4);
-  }
-}
-
-// Animación para los inputs
-ion-input, ion-button {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:focus {
-    transform: translateY(-1px);
-  }
-}
-.currency-item {
-  --background: var(--ion-color-light);
-  border-radius: 12px;
-  margin-bottom: 20px;
-
-  ion-label {
-    color: var(--ion-color-medium);
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-
-  ion-select {
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --padding-top: 16px;
-    --padding-bottom: 16px;
-    --placeholder-color: var(--ion-color-medium);
-    --placeholder-opacity: 0.8;
-    width: 100%;
-    color: var(--ion-color-dark);
-    font-size: 1rem;
-  }
-
-  &::part(native) {
-    padding: 0;
-    background: var(--ion-color-light);
-    border-radius: 12px;
-  }
-}
-
-// Estilos para el action sheet de monedas
-.select-interface-option {
-  font-size: 1rem;
+/* Estilos base para inputs y selects */
+ion-input, ion-select {
+  width: 100%;
   --padding-start: 16px;
   --padding-end: 16px;
-  
-  .select-interface-option-text {
-    color: var(--ion-color-dark);
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --border-radius: 20px;
+  font-size: 16px;
+  margin-bottom: 16px;
+  border-radius: 20px;
+}
+
+/* Botones y otros elementos comunes */
+.button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px; /* Aumentado para ser más redondeado */
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+}
+
+.button-primary {
+  background-color: var(--ion-color-primary, #3a56e4);
+  color: white;
+  box-shadow: 0 4px 12px rgba(58, 86, 228, 0.3);
+
+  &:hover {
+    background-color: var(--ion-color-primary-shade, #2a46d4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(58, 86, 228, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    background-color: var(--ion-color-medium);
+    transform: none;
+    box-shadow: none;
   }
 }
 
-// Actualiza el estilo del botón para manejar el estado disabled
-ion-button {
-  &[disabled] {
-    --opacity: 0.7;
+.terms {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--text-secondary, #6b7280); /* Cambiado para usar la variable de tema general */
+  font-size: 14px;
+
+  a {
+    color: var(--ion-color-primary); /* Cambiado para usar el color primario */
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
+}
+
+.steps-indicator {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.step {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-secondary, rgba(107, 114, 128, 0.3)); /* Cambiado para usar el color secundario */
+  margin: 0 4px;
+
+  &.active {
+    background-color: var(--ion-color-primary); /* Cambiado para usar el color primario */
+    width: 24px;
+    border-radius: 4px;
+  }
+}
+
+/* Estilos por defecto (modo claro) */
+:host {
+  ion-input, input, ion-select {
+    --background: var(--input-bg-light) !important;
+    --color: var(--text-color, #1f2937) !important;
+    --placeholder-color: var(--placeholder-color-light) !important;
+    border: 1px solid var(--input-border-light) !important;
+    background-color: var(--input-bg-light) !important;
+  }
+  
+  /* Aplicando estilos a elementos nativos del input */
+  ion-input::part(native),
+  ion-select::part(native),
+  ion-input .native-input,
+  ion-select .native-select {
+    background-color: var(--input-bg-light) !important;
+    color: var(--text-color, #1f2937) !important;
+  }
+}
+
+/* Estilos específicos para modo claro */
+:host-context(.override-light-mode) {
+  .registration-card {
+    background-color: var(--card-bg, #ffffff);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  }
+
+  .welcome-text {
+    color: var(--text-color, #1f2937);
+  }
+
+  .subtitle {
+    color: var(--text-secondary, #6b7280);
+  }
+
+  .form-label {
+    color: var(--text-color, #1f2937);
+  }
+  
+  ion-input, input, ion-select, select {
+    --background: var(--input-bg-light) !important;
+    --color: var(--text-color, #1f2937) !important;
+    --placeholder-color: var(--placeholder-color-light) !important;
+    border: 1px solid var(--input-border-light) !important;
+    background-color: var(--input-bg-light) !important;
+  }
+  
+  /* Aplicando estilos a elementos nativos del input */
+  ion-input::part(native),
+  ion-select::part(native),
+  ion-input .native-input,
+  ion-select .native-select {
+    background-color: var(--input-bg-light) !important;
+    color: var(--text-color, #1f2937) !important;
+  }
+
+  .terms {
+    color: var(--text-secondary, #6b7280);
+  }
+
+  .step {
+    background-color: rgba(107, 114, 128, 0.3);
+    
+    &.active {
+      background-color: var(--ion-color-primary);
+    }
+  }
+}
+
+/* Mantener los mismos estilos para modo oscuro explícito */
+:host-context(.override-dark-mode) {
+  .registration-card {
+    background-color: var(--card-bg, #1f2937);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.2));
+  }
+
+  .welcome-text {
+    color: var(--text-color, #f9fafb);
+  }
+
+  .subtitle {
+    color: var(--text-secondary, #d1d5db);
+  }
+  
+  .form-label {
+    color: var(--text-color, #fbf9f9);
+  }
+  
+  ion-input, input, ion-select, select {
+    --background: var(--input-bg-dark) !important;
+    --color: var(--text-color, #f9fafb) !important;
+    --placeholder-color: var(--placeholder-color-dark) !important;
+    border: 1px solid var(--input-border-dark) !important;
+    background-color: var(--input-bg-dark) !important;
+  }
+  
+  /* Aplicando estilos a elementos nativos del input */
+  ion-input::part(native),
+  ion-select::part(native),
+  ion-input .native-input,
+  ion-select .native-select {
+    background-color: var(--input-bg-dark) !important;
+    color: var(--text-color, #f9fafb) !important;
+  }
+
+  .ion-select::part(icon) {
+    color: var(--text-color, #f9fafb) !important;
+  }
+  
+  .terms {
+    color: var(--text-secondary, #d1d5db);
+    
+    a {
+      color: var(--ion-color-primary-tint);
+    }
+  }
+  
+  .step {
+    background-color: rgba(255, 255, 255, 0.2);
+    
+    &.active {
+      background-color: var(--ion-color-primary);
+    }
+  }
+}
+
+/* Agregar importancia para sobrescribir estilos inline */
+body.override-dark-mode ion-input,
+body.override-dark-mode ion-select {
+  --background: var(--input-bg-dark) !important;
+  background-color: var(--input-bg-dark) !important;
+}
+
+/* Estilos adicionales para asegurar que el fondo sea visible */
+.setup-content[data-theme="dark"] ion-input input,
+.setup-content[data-theme="dark"] ion-select select,
+body.override-dark-mode ion-item.item.ion-focusable ion-input input {
+  background-color: var(--input-bg-dark) !important;
+  color: var(--text-color, #f9fafb) !important;
+}
+
+/* Estilos para el fondo del elemento nativo, que es el que realmente se ve */
+.setup-content[data-theme="dark"] ion-input::shadow input,
+.setup-content[data-theme="dark"] ion-input::part(input),
+.setup-content[data-theme="dark"] ion-input::part(textarea),
+.setup-content[data-theme="dark"] ion-input::part(native-input) {
+  background-color: var(--input-bg-dark) !important;
+  color: var(--text-color, #f9fafb) !important;
+}
+
+/* Estilos específicos para atacar directamente el elemento input nativo */
+.override-dark-mode ion-input input[type],
+.override-dark-mode ion-input input:not([type]),
+.override-dark-mode ion-input textarea,
+.override-dark-mode ion-input [inputmode],
+body.override-dark-mode .input-native,
+body.override-dark-mode .native-input,
+body.override-dark-mode .sc-ion-input-md,
+body.override-dark-mode .sc-ion-input-ios {
+  background-color: var(--input-bg-dark) !important;
+  color: var(--text-color, #f9fafb) !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Estilos específicos para los elementos del shadow DOM */
+body.override-dark-mode ion-input.ion-untouched.ion-pristine.ion-valid.in-item.sc-ion-input-md-h,
+body.override-dark-mode ion-input.md.hydrated,
+body.override-dark-mode ion-input.sc-ion-input-md-h {
+  --background: var(--input-bg-dark) !important;
+}
+
+/* Estilo inline para ser aplicado directamente al elemento */
+.themed-input-fix {
+  --background: var(--input-bg-dark) !important;
+  background-color: var(--input-bg-dark) !important;
 }

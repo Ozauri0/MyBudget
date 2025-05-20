@@ -78,6 +78,93 @@
   }
 }
 
+/* Action sheet para selección de moneda - Reemplazando con nuevos estilos */
+.select-action-sheet-dark {
+  --background: #1f2937 !important;
+  --button-background: #1f2937 !important;
+  --button-background-selected: var(--ion-color-primary) !important;
+  --button-background-selected-opacity: 0.2 !important;
+  --button-background-activated: #374151 !important;
+  --button-background-hover: #374151 !important;
+  --button-color: #f9fafb !important;
+  --color: #f9fafb !important;
+  --backdrop-opacity: 0.9 !important;
+
+  .action-sheet-title {
+    color: #f9fafb !important;
+    background-color: #1f2937 !important;
+  }
+
+  .action-sheet-group {
+    background: #1f2937 !important;
+    opacity: 1 !important;
+  }
+
+  .action-sheet-button {
+    color: #f9fafb !important;
+    background-color: #1f2937 !important;
+    opacity: 1 !important;
+    
+    &:hover {
+      background: #374151 !important;
+    }
+  }
+
+  .action-sheet-selected {
+    color: var(--ion-color-primary) !important;
+    font-weight: 600 !important;
+    background-color: rgba(79, 70, 229, 0.2) !important;
+  }
+
+  .action-sheet-cancel {
+    background: #111827 !important;
+    color: #f9fafb !important;
+  }
+}
+
+.select-action-sheet-light {
+  --background: #ffffff !important;
+  --button-background: #ffffff !important;
+  --button-background-selected: var(--ion-color-primary) !important;
+  --button-background-selected-opacity: 0.1 !important;
+  --button-background-activated: #f3f4f6 !important;
+  --button-background-hover: #f3f4f6 !important;
+  --button-color: #1f2937 !important;
+  --color: #1f2937 !important;
+  --backdrop-opacity: 0.9 !important;
+
+  .action-sheet-title {
+    color: #1f2937 !important;
+    background-color: #ffffff !important;
+  }
+
+  .action-sheet-group {
+    background: #ffffff !important;
+    opacity: 1 !important;
+  }
+
+  .action-sheet-button {
+    color: #1f2937 !important;
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+    
+    &:hover {
+      background: #f3f4f6 !important;
+    }
+  }
+
+  .action-sheet-selected {
+    color: var(--ion-color-primary) !important;
+    font-weight: 600 !important;
+    background-color: rgba(79, 70, 229, 0.1) !important;
+  }
+
+  .action-sheet-cancel {
+    background: #f3f4f6 !important;
+    color: #1f2937 !important;
+  }
+}
+
 /* Estilos específicos para modo oscuro */
 body.override-dark-mode .custom-alert,
 body:not(.override-light-mode):not(.override-dark-mode).dark-theme .custom-alert {
@@ -113,4 +200,240 @@ body:not(.override-light-mode):not(.override-dark-mode):not(.dark-theme) .custom
   .alert-button-delete {
     color: white;
   }
+}
+
+/* Estilos para los ActionSheets en ambos modos */
+.action-sheet-group {
+  background: var(--ion-background-color);
+}
+
+/* Estilos para los textos de action-sheet en modo claro */
+body.override-light-mode .action-sheet-button,
+body:not(.override-light-mode):not(.override-dark-mode):not(.dark-theme) .action-sheet-button {
+  color: var(--ion-text-color, #1f2937);
+}
+
+/* Estilos para los textos de action-sheet en modo oscuro */
+body.override-dark-mode .action-sheet-button,
+body:not(.override-light-mode):not(.override-dark-mode).dark-theme .action-sheet-button {
+  color: var(--ion-text-color, #f9fafb);
+}
+
+/* Estilos para el título del action-sheet en modo claro */
+body.override-light-mode .action-sheet-title,
+body:not(.override-light-mode):not(.override-dark-mode):not(.dark-theme) .action-sheet-title {
+  color: var(--ion-text-color, #1f2937);
+}
+
+/* Estilos para el título del action-sheet en modo oscuro */
+body.override-dark-mode .action-sheet-title,
+body:not(.override-light-mode):not(.override-dark-mode).dark-theme .action-sheet-title {
+  color: var(--ion-text-color, #f9fafb);
+}
+
+/* Estilos para el fondo del action-sheet en modo claro */
+body.override-light-mode .action-sheet-group,
+body:not(.override-light-mode):not(.override-dark-mode):not(.dark-theme) .action-sheet-group {
+  background: #ffffff;
+}
+
+/* Estilos para el fondo del action-sheet en modo oscuro */
+body.override-dark-mode .action-sheet-group,
+body:not(.override-light-mode):not(.override-dark-mode).dark-theme .action-sheet-group {
+  background: #1f2937;
+}
+
+/* Estilos para los ActionSheets - Sobrescribiendo estilos de Ionic */
+.action-sheet-button {
+  color: inherit !important;
+}
+
+/* Sobrescribir estilos de Ionic para asegurar que action-sheet respete el tema */
+.action-sheet-container.sc-ion-action-sheet-ios,
+.action-sheet-container.sc-ion-action-sheet-md,
+.action-sheet-group.sc-ion-action-sheet-ios,
+.action-sheet-group.sc-ion-action-sheet-md {
+  background-color: inherit !important;
+}
+
+/* Hacer que un select con interfaz action-sheet siempre adopte el tema correcto */
+ion-action-sheet.select-interface-action-sheet.select-action-sheet-dark {
+  --background: #1f2937 !important;
+  
+  .action-sheet-group {
+    background: #1f2937 !important;
+  }
+  
+  .action-sheet-title {
+    color: #f9fafb !important;
+  }
+  
+  .action-sheet-button {
+    color: #f9fafb !important;
+  }
+  
+  .action-sheet-button.action-sheet-cancel {
+    background: #111827 !important;
+  }
+}
+
+ion-action-sheet.select-interface-action-sheet.select-action-sheet-light {
+  --background: #ffffff !important;
+  
+  .action-sheet-group {
+    background: #ffffff !important;
+  }
+  
+  .action-sheet-title {
+    color: #1f2937 !important;
+  }
+  
+  .action-sheet-button {
+    color: #1f2937 !important;
+  }
+  
+  .action-sheet-button.action-sheet-cancel {
+    background: #f3f4f6 !important;
+  }
+}
+
+/* Reglas específicas para eliminar transparencia en action-sheets */
+ion-action-sheet .action-sheet-container {
+  opacity: 1 !important;
+}
+
+ion-action-sheet .action-sheet-group {
+  background-color: #1f2937 !important;
+  opacity: 1 !important;
+}
+
+ion-action-sheet.select-action-sheet-dark .action-sheet-group {
+  background-color: #1f2937 !important;
+}
+
+ion-action-sheet.select-action-sheet-light .action-sheet-group {
+  background-color: #ffffff !important;
+}
+
+/* Reglas para iOS específicamente */
+.sc-ion-action-sheet-ios {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.sc-ion-action-sheet-ios-h {
+  --background: unset !important;
+  --button-background: unset !important;
+}
+
+.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-group.sc-ion-action-sheet-ios {
+  background-color: inherit !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Sobreescribir regla de transparencia para iOS */
+.action-sheet-group.sc-ion-action-sheet-ios {
+  background-color: inherit !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Asegurar color de texto para ambos temas */
+.action-sheet-button.sc-ion-action-sheet-md,
+.action-sheet-button.sc-ion-action-sheet-ios {
+  opacity: 1 !important;
+}
+
+/* Eliminar cualquier efecto de transparencia */
+.ion-backdrop {
+  opacity: 0.8 !important;
+}
+
+/* Asegurarse de que el backdrop es suficientemente opaco */
+.ion-backdrop-dark {
+  --backdrop-opacity: 0.8 !important;
+}
+
+/* Forzar fondo sólido en el contenedor de action-sheet */
+.action-sheet-wrapper.sc-ion-action-sheet-ios,
+.action-sheet-wrapper.sc-ion-action-sheet-md {
+  opacity: 1 !important;
+}
+
+/* Sobreescritura directa de las reglas de Ionic para eliminar transparencias */
+ion-action-sheet.sc-ion-action-sheet-ios,
+ion-action-sheet.sc-ion-action-sheet-md {
+  --backdrop-opacity: 1 !important;
+}
+
+.action-sheet-group.sc-ion-action-sheet-ios,
+.action-sheet-group.sc-ion-action-sheet-md {
+  background-color: #1f2937 !important;
+  opacity: 1 !important;
+}
+
+/* Modo oscuro - forzar colores sólidos */
+body.dark-theme .action-sheet-group.sc-ion-action-sheet-ios,
+body.dark-theme .action-sheet-group.sc-ion-action-sheet-md,
+body.override-dark-mode .action-sheet-group.sc-ion-action-sheet-ios,
+body.override-dark-mode .action-sheet-group.sc-ion-action-sheet-md {
+  background-color: #1f2937 !important;
+}
+
+body.dark-theme .action-sheet-button.sc-ion-action-sheet-ios,
+body.dark-theme .action-sheet-button.sc-ion-action-sheet-md,
+body.override-dark-mode .action-sheet-button.sc-ion-action-sheet-ios,
+body.override-dark-mode .action-sheet-button.sc-ion-action-sheet-md {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+body.dark-theme .action-sheet-title.sc-ion-action-sheet-ios,
+body.dark-theme .action-sheet-title.sc-ion-action-sheet-md,
+body.override-dark-mode .action-sheet-title.sc-ion-action-sheet-ios,
+body.override-dark-mode .action-sheet-title.sc-ion-action-sheet-md {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+/* Modo claro - forzar colores sólidos */
+body:not(.dark-theme):not(.override-dark-mode) .action-sheet-group.sc-ion-action-sheet-ios,
+body:not(.dark-theme):not(.override-dark-mode) .action-sheet-group.sc-ion-action-sheet-md,
+body.override-light-mode .action-sheet-group.sc-ion-action-sheet-ios,
+body.override-light-mode .action-sheet-group.sc-ion-action-sheet-md {
+  background-color: #ffffff !important;
+}
+
+body:not(.dark-theme):not(.override-dark-mode) .action-sheet-button.sc-ion-action-sheet-ios,
+body:not(.dark-theme):not(.override-dark-mode) .action-sheet-button.sc-ion-action-sheet-md,
+body.override-light-mode .action-sheet-button.sc-ion-action-sheet-ios,
+body.override-light-mode .action-sheet-button.sc-ion-action-sheet-md {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+body:not(.dark-theme):not(.override-dark-mode) .action-sheet-title.sc-ion-action-sheet-ios,
+body:not(.dark-theme):not(.override-dark-mode) .action-sheet-title.sc-ion-action-sheet-md,
+body.override-light-mode .action-sheet-title.sc-ion-action-sheet-ios,
+body.override-light-mode .action-sheet-title.sc-ion-action-sheet-md {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+/* Desactivar cualquier efecto de transparencia */
+.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-group.sc-ion-action-sheet-ios {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Corrección para efectos de transparencia específicos de iOS */
+.action-sheet-translucent.sc-ion-action-sheet-ios-h {
+  --backdrop-opacity: 1 !important;
+}
+
+.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-button.sc-ion-action-sheet-ios,
+.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-title.sc-ion-action-sheet-ios {
+  background-color: inherit !important;
+  opacity: 1 !important;
 }
