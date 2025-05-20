@@ -5,7 +5,7 @@
     <!-- Balance Card -->
     <ion-card *ngIf="userData" class="balance-card">
       <ion-card-content>
-        <h2 class="welcome-title">¡Bienvenido {{ userData.name }}!</h2>
+        <h2 class="welcome-title">¡Bienvenid&#64; {{ userData.name }}!</h2>
         <div class="balance-container">
           <p class="balance-label">Balance disponible</p>
           <p class="balance-amount">${{ availableBalance | number:'1.0-0' }}</p>

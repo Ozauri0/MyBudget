@@ -957,14 +957,17 @@ export class HomePage implements OnInit, AfterViewInit {
     const alert = await this.alertCtrl.create({
       header: '¿Eliminar transacción?',
       message: '¿Estás seguro que deseas eliminar esta transacción?',
+      cssClass: 'custom-alert',
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
         },
         {
           text: 'Eliminar',
           role: 'destructive',
+          cssClass: 'alert-button-delete',
           handler: async () => {
             await this.database.deleteTransaction(id);
             await this.loadTransactions();
