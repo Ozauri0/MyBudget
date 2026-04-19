@@ -336,6 +336,14 @@ export class AccountsPage implements OnInit, OnDestroy {
     };
   }
 
+  private formatMonthLabel(monthYear: string): string {
+    const [month, year] = monthYear.split('/').map(Number);
+    const date = new Date(year, month - 1, 1);
+    const abbr = date.toLocaleString('es', { month: 'short' });
+    const shortYear = String(year).slice(2);
+    return `${abbr.charAt(0).toUpperCase() + abbr.slice(1)} '${shortYear}`;
+  }
+
   private prepareLineChartData() {
     const monthlyData = new Map<string, { expenses: number, income: number }>();
     
@@ -358,106 +366,166 @@ export class AccountsPage implements OnInit, OnDestroy {
       return yearA !== yearB ? yearA - yearB : monthA - monthB;
     });
 
-    // get the total amount for the selected month
+    const labels = sortedMonths.map(m => this.formatMonthLabel(m));
+
     const textColor = this.getTextColor();
+    const textSecondary = this.isDarkMode ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.35)';
     const tooltipBackgroundColor = this.getTooltipBackgroundColor();
     const tooltipBorderColor = this.getTooltipBorderColor();
+    const gridLineColor = this.isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    const axisLineColor = this.isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)';
+
+    const incomeColor = '#2dd36f';
+    const expenseColor = '#eb445a';
 
     this.lineChartOption = {
       animation: true,
+      animationEasing: 'cubicOut',
+      animationDuration: 800,
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
+          type: 'line',
+          lineStyle: {
+            color: this.isDarkMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
+            width: 1,
+            type: 'dashed'
           }
         },
         formatter: (params: any) => {
-          let result = `${params[0].axisValue}<br/>`;
-          params.forEach((param: any) => {
-            result += `${param.seriesName}: ${this.currencyService.formatAmount(param.value)}<br/>`;
+          const month = params[0]?.axisValue ?? '';
+          let html = `<div style="font-size:12px;font-weight:600;margin-bottom:6px;color:${textColor}">${month}</div>`;
+          params.forEach((p: any) => {
+            const dot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${p.color};margin-right:6px;"></span>`;
+            html += `<div style="display:flex;justify-content:space-between;gap:16px;font-size:12px;color:${textColor}">
+              <span>${dot}${p.seriesName}</span>
+              <span style="font-weight:600">${this.currencyService.formatAmount(p.value)}</span>
+            </div>`;
           });
-          return result;
+          return html;
         },
         backgroundColor: tooltipBackgroundColor,
         borderColor: tooltipBorderColor,
-        textStyle: {
-          color: textColor
-        }
+        borderWidth: 1,
+        padding: [10, 14],
+        extraCssText: 'border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15)'
       },
       legend: {
-        data: ['Ingresos', 'Gastos'],
-        bottom: '10',
+        data: [
+          { name: 'Ingresos', icon: 'circle' },
+          { name: 'Gastos', icon: 'circle' }
+        ],
+        bottom: 0,
+        itemWidth: 10,
+        itemHeight: 10,
         textStyle: {
-          color: textColor
+          color: textColor,
+          fontSize: 12
         }
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '15%',
+        left: 12,
+        right: 12,
+        top: 16,
+        bottom: 44,
         containLabel: true
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: sortedMonths,
+        data: labels,
         axisLabel: {
-          color: textColor
+          color: textSecondary,
+          fontSize: 11,
+          margin: 10
         },
         axisLine: {
-          lineStyle: {
-            color: this.isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'
-          }
-        }
+          lineStyle: { color: axisLineColor }
+        },
+        axisTick: { show: false }
       },
       yAxis: {
         type: 'value',
         axisLabel: {
           formatter: (value: number) => this.currencyService.formatAmount(value),
-          color: textColor
+          color: textSecondary,
+          fontSize: 11
         },
         splitLine: {
           lineStyle: {
-            color: this.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+            color: gridLineColor,
+            type: 'dashed'
           }
-        }
+        },
+        axisLine: { show: false },
+        axisTick: { show: false }
       },
       series: [
         {
           name: 'Ingresos',
           type: 'line',
+          smooth: 0.5,
+          symbol: 'circle',
+          symbolSize: 6,
+          showSymbol: false,
+          lineStyle: {
+            width: 2.5,
+            color: incomeColor
+          },
+          itemStyle: {
+            color: incomeColor,
+            borderWidth: 2,
+            borderColor: this.isDarkMode ? '#1f2937' : '#ffffff'
+          },
           areaStyle: {
-            opacity: 0.3
+            color: {
+              type: 'linear',
+              x: 0, y: 0, x2: 0, y2: 1,
+              colorStops: [
+                { offset: 0, color: 'rgba(45, 211, 111, 0.35)' },
+                { offset: 1, color: 'rgba(45, 211, 111, 0.00)' }
+              ]
+            }
           },
           emphasis: {
             focus: 'series',
-            areaStyle: {
-              opacity: 0.5
-            }
+            showSymbol: true,
+            scale: true
           },
-          data: sortedMonths.map(m => monthlyData.get(m)?.income || 0),
-          itemStyle: {
-            color: '#2dd36f'
-          }
+          data: sortedMonths.map(m => monthlyData.get(m)?.income || 0)
         },
         {
           name: 'Gastos',
           type: 'line',
+          smooth: 0.5,
+          symbol: 'circle',
+          symbolSize: 6,
+          showSymbol: false,
+          lineStyle: {
+            width: 2.5,
+            color: expenseColor
+          },
+          itemStyle: {
+            color: expenseColor,
+            borderWidth: 2,
+            borderColor: this.isDarkMode ? '#1f2937' : '#ffffff'
+          },
           areaStyle: {
-            opacity: 0.3
+            color: {
+              type: 'linear',
+              x: 0, y: 0, x2: 0, y2: 1,
+              colorStops: [
+                { offset: 0, color: 'rgba(235, 68, 90, 0.3)' },
+                { offset: 1, color: 'rgba(235, 68, 90, 0.00)' }
+              ]
+            }
           },
           emphasis: {
             focus: 'series',
-            areaStyle: {
-              opacity: 0.5
-            }
+            showSymbol: true,
+            scale: true
           },
-          data: sortedMonths.map(m => monthlyData.get(m)?.expenses || 0),
-          itemStyle: {
-            color: '#eb445a'
-          }
+          data: sortedMonths.map(m => monthlyData.get(m)?.expenses || 0)
         }
       ]
     };
