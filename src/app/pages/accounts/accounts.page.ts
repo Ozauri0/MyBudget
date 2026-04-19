@@ -489,7 +489,6 @@ export class AccountsPage implements OnInit, OnDestroy {
           },
           emphasis: {
             focus: 'series',
-            showSymbol: true,
             scale: true
           },
           data: sortedMonths.map(m => monthlyData.get(m)?.income || 0)
@@ -522,7 +521,6 @@ export class AccountsPage implements OnInit, OnDestroy {
           },
           emphasis: {
             focus: 'series',
-            showSymbol: true,
             scale: true
           },
           data: sortedMonths.map(m => monthlyData.get(m)?.expenses || 0)
